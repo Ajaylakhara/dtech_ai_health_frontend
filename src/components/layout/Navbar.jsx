@@ -55,7 +55,7 @@ const Navbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-10 select-none">
-          {navLinks.map((link) => {
+          {navLinks.filter(link => link.name !== 'Appointments' || userInfo).map((link) => {
             const isActive = location.pathname === link.path;
             return (
               <Link
@@ -143,7 +143,7 @@ const Navbar = () => {
             className="lg:hidden bg-[#0B1120]/95 backdrop-blur-2xl border-b border-white/5 overflow-hidden"
           >
             <div className="px-5 py-8 flex flex-col gap-5">
-              {navLinks.map((link) => (
+              {navLinks.filter(link => link.name !== 'Appointments' || userInfo).map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
