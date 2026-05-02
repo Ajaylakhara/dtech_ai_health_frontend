@@ -37,7 +37,7 @@ const AppRoutes = () => {
     <Routes>
       {/* ── Auth Layout (No Navbar/Footer) ── */}
       <Route element={<AuthLayout />}>
-        <Route path="/" element={<LoginForm />} />
+        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm />} />
       </Route>
 
