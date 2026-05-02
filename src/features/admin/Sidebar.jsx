@@ -1,8 +1,18 @@
-import { NavLink } from 'react-router-dom';
-import { FaHeartbeat, FaUserInjured, FaDollarSign, FaCog, FaQuestionCircle, FaUserMd, FaHospital, FaCalendarCheck } from 'react-icons/fa';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/slices/authSlice';
+import { FaHeartbeat, FaUserInjured, FaDollarSign, FaCog, FaQuestionCircle, FaUserMd, FaHospital, FaCalendarCheck, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import { MdMessage, MdQueryStats } from 'react-icons/md';
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
+
   const navLinkClasses = ({ isActive }) =>
     `flex items-center gap-4 px-5 py-3.5 rounded-2xl transition-all duration-300 font-bold tracking-wide select-none ${
       isActive
@@ -58,6 +68,11 @@ const Sidebar = () => {
           <span className="flex-shrink-0"><FaDollarSign className="text-xl" /></span>
           <span>Payment</span>
         </NavLink>
+
+        <NavLink to="/profile" className={navLinkClasses}>
+          <span className="flex-shrink-0"><FaUserCircle className="text-xl" /></span>
+          <span>Profile</span>
+        </NavLink>
       </nav>
 
       <div className="mt-auto px-4 pb-8 flex flex-col gap-2 border-t border-white/5 pt-5 relative">
@@ -68,6 +83,10 @@ const Sidebar = () => {
          <button className={actionButtonClasses}>
           <span className="flex-shrink-0"><FaQuestionCircle className="text-xl" /></span>
           <span>Support</span>
+        </button>
+         <button onClick={handleLogout} className={`${actionButtonClasses} text-red-400/90 hover:text-red-300 hover:bg-red-500/5`}>
+          <span className="flex-shrink-0"><FaSignOutAlt className="text-xl" /></span>
+          <span>Logout</span>
         </button>
       </div>
     </aside>
