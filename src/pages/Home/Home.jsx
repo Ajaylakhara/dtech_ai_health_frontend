@@ -1,4 +1,5 @@
 import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
 import HeroSection from '../../features/landing/HeroSection';
 import TrustSection from '../../features/landing/TrustSection';
 import StatsSection from '../../features/landing/StatsSection';
@@ -9,13 +10,12 @@ import TestimonialsSection from '../../features/landing/TestimonialsSection';
 import PricingSection from '../../features/landing/PricingSection';
 import CTASection from '../../features/landing/CTASection';
 import FAQSection from '../../features/landing/FAQSection';
-import DTechFooter from '../../features/landing/DTechFooter';
 
 const Home = () => {
   return (
-    <div className="w-full bg-[#0B1120] min-h-screen text-slate-100 flex flex-col font-sans antialiased overflow-hidden selection:bg-blue-500/30">
+    <div style={{ width: '100%', background: '#FFFFFF', minHeight: '100vh', fontFamily: "'Inter', sans-serif", overflowX: 'hidden' }}>
       <Navbar />
-      <main className="flex-grow flex flex-col">
+      <main>
         <HeroSection />
         <TrustSection />
         <StatsSection />
@@ -27,7 +27,7 @@ const Home = () => {
         <CTASection />
         <FAQSection />
       </main>
-      {/* <DTechFooter /> */}
+      <Footer />
     </div>
   );
 };

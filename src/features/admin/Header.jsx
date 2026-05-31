@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaSearch, FaBell, FaChevronDown } from 'react-icons/fa';
+import { FaSearch, FaBell } from 'react-icons/fa';
 import Adminimg from "../../assets/Images/Adminimg.jpg";
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -7,60 +7,121 @@ const Header = ({ adminName, onAddDoctorClick }) => {
   const [searchValue, setSearchValue] = useState('');
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  // Debounced search simulator
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (searchValue.trim()) {
-        console.log(`Debounced search for: ${searchValue}`);
-      }
+      if (searchValue.trim()) console.log(`Search: ${searchValue}`);
     }, 500);
     return () => clearTimeout(handler);
   }, [searchValue]);
 
   const notifications = [
-    { id: 1, title: 'System Alert', desc: 'New user registered successfully.' },
-    { id: 2, title: 'AI Completion', desc: 'Predictive diagnostic computation complete.' },
-    { id: 3, title: 'Database Sync', desc: 'Secure encryption keys refreshed.' },
+    { id: 1, title: 'New Patient Registered', desc: 'A new patient account was created successfully.', dot: '#27AE60' },
+    { id: 2, title: 'Appointment Booked', desc: 'Dr. Mitchell has a new appointment at 2:30 PM.', dot: '#4A90E2' },
+    { id: 3, title: 'Lab Results Ready', desc: 'Patient John Doe – lab report is ready for review.', dot: '#F59E0B' },
   ];
 
   return (
-    <header className="flex items-center justify-between py-5 px-6 border-b border-white/5 relative bg-[#0B1120]/60 backdrop-blur-xl">
-      {/* Left side: Heading */}
-      <div className="flex items-center gap-4">
-        <h2 className="text-white text-xl font-black tracking-tight hidden sm:block">
-          Enterprise <span className="text-gradient">Management</span>
-        </h2>
+    <header style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '14px 24px',
+      borderBottom: '1px solid #E8EDF4',
+      background: 'rgba(255, 255, 255, 0.85)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      position: 'relative',
+      zIndex: 30,
+    }}>
+      {/* Left: Title */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div>
+          <h2 style={{
+            fontFamily: "'Lora', serif",
+            fontSize: 18, fontWeight: 700,
+            color: '#0D1B2A',
+            margin: 0, lineHeight: 1.2,
+          }}>
+            Hospital <span style={{ color: '#173C63' }}>Management</span>
+          </h2>
+          <p style={{ fontSize: 11, color: '#6B7A8D', margin: 0, fontWeight: 500 }}>
+            Admin Dashboard
+          </p>
+        </div>
       </div>
 
-      {/* Right side: Actions, Search, Notifications, Avatar */}
-      <div className="flex items-center gap-5">
-        <button 
+      {/* Right: Actions */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        {/* Add New Button */}
+        <button
           onClick={onAddDoctorClick}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-blue-500/25 hover:opacity-90 transition-all active:scale-95 flex items-center gap-2 select-none"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 7,
+            padding: '9px 20px',
+            background: '#173C63',
+            color: '#fff',
+            border: 'none', borderRadius: 50,
+            fontSize: 13, fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(23,60,99,0.15)',
+            transition: 'all 0.2s',
+            userSelect: 'none',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(23,60,99,0.25)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(23,60,99,0.15)'; }}
         >
-          Add New <span className="text-xs">+</span>
+          Quick Add <span style={{ fontSize: 16, lineHeight: 1 }}>+</span>
         </button>
 
-        {/* Debounced Search */}
-        <div className="relative hidden md:flex items-center">
-          <FaSearch className="absolute left-4 text-slate-500 text-sm select-none" />
+        {/* Search */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }} className="hidden-mobile">
+          <FaSearch style={{
+            position: 'absolute', left: 14,
+            color: '#9DAAB8', fontSize: 12,
+            pointerEvents: 'none',
+          }} />
           <input
             type="text"
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={e => setSearchValue(e.target.value)}
             placeholder="Search records..."
-            className="pl-11 pr-4 py-2.5 w-64 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/60 transition-all font-semibold text-white placeholder-slate-500 text-sm"
+            style={{
+              paddingLeft: 38, paddingRight: 16,
+              paddingTop: 9, paddingBottom: 9,
+              width: 220,
+              background: '#F8FAFC',
+              border: '1px solid #E8EDF4',
+              borderRadius: 10,
+              color: '#0D1B2A',
+              fontSize: 13, fontWeight: 500,
+              outline: 'none',
+              transition: 'border-color 0.2s',
+            }}
+            onFocus={e => e.target.style.borderColor = 'rgba(74,144,226,0.4)'}
+            onBlur={e => e.target.style.borderColor = '#E8EDF4'}
           />
         </div>
 
-        {/* Notifications Dropdown */}
-        <div className="relative">
-          <button 
+        {/* Notifications */}
+        <div style={{ position: 'relative' }}>
+          <button
             onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-            className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-slate-300 hover:bg-white/10 hover:border-white/20 transition-all relative select-none"
+            style={{
+              width: 38, height: 38, borderRadius: 10,
+              background: '#F8FAFC',
+              border: '1px solid #E8EDF4',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#6B7A8D', cursor: 'pointer', position: 'relative',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.color = '#173C63'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.color = '#6B7A8D'; }}
           >
-            <FaBell className="text-sm text-slate-300" />
-            <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-[1.5px] border-[#0B1120]"></span>
+            <FaBell style={{ fontSize: 14 }} />
+            <span style={{
+              position: 'absolute', top: 8, right: 8,
+              width: 7, height: 7, borderRadius: '50%',
+              background: '#EB5757',
+              border: '1.5px solid #FFFFFF',
+            }} />
           </button>
 
           <AnimatePresence>
@@ -69,18 +130,40 @@ const Header = ({ adminName, onAddDoctorClick }) => {
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute right-0 mt-3 w-80 glass border border-white/10 rounded-2xl p-5 shadow-2xl backdrop-blur-2xl z-50 text-left select-none"
+                transition={{ duration: 0.18 }}
+                style={{
+                  position: 'absolute', right: 0, top: '100%', marginTop: 10,
+                  width: 300,
+                  background: '#FFFFFF',
+                  border: '1px solid #E8EDF4',
+                  borderRadius: 16,
+                  padding: 20,
+                  boxShadow: '0 20px 60px rgba(23,60,99,0.08)',
+                  zIndex: 100,
+                }}
               >
-                <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-3">
-                  <h4 className="text-sm font-black text-white">Notifications</h4>
-                  <span className="text-xs font-bold text-blue-400">3 Unread</span>
+                <div style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  paddingBottom: 12, marginBottom: 12,
+                  borderBottom: '1px solid #E8EDF4',
+                }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0D1B2A' }}>Notifications</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: '#4A90E2' }}>3 Unread</span>
                 </div>
-                <div className="flex flex-col gap-3">
-                  {notifications.map((n) => (
-                    <div key={n.id} className="p-3 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition-all duration-300">
-                      <h5 className="text-xs font-black text-white">{n.title}</h5>
-                      <p className="text-xs font-medium text-slate-400 leading-relaxed mt-1">{n.desc}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {notifications.map(n => (
+                    <div key={n.id} style={{
+                      padding: '10px 12px', borderRadius: 10,
+                      background: '#F8FAFC',
+                      border: '1px solid #E8EDF4',
+                      display: 'flex', gap: 10, alignItems: 'flex-start',
+                      cursor: 'pointer',
+                    }}>
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: n.dot, marginTop: 5, flexShrink: 0 }} />
+                      <div>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: '#0D1B2A', marginBottom: 2 }}>{n.title}</div>
+                        <div style={{ fontSize: 11, color: '#6B7A8D', lineHeight: 1.5 }}>{n.desc}</div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -89,15 +172,29 @@ const Header = ({ adminName, onAddDoctorClick }) => {
           </AnimatePresence>
         </div>
 
-        {/* Avatar section */}
-        <div className="flex items-center gap-3 pl-2 select-none">
-          <img src={Adminimg} alt="Admin" className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/5" />
-          <div className="hidden md:block text-left">
-            <p className="text-white text-sm font-bold leading-tight">{adminName || 'Admin'}</p>
-            <p className="text-slate-500 text-[11px] font-medium leading-tight">Platform Specialist</p>
+        {/* Avatar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingLeft: 4, userSelect: 'none' }}>
+          <img
+            src={Adminimg}
+            alt="Admin"
+            style={{
+              width: 36, height: 36, borderRadius: 10,
+              objectFit: 'cover',
+              border: '2px solid rgba(74,144,226,0.15)',
+            }}
+          />
+          <div className="hidden-mobile">
+            <p style={{ fontSize: 13, fontWeight: 700, color: '#0D1B2A', margin: 0, lineHeight: 1.2 }}>
+              {adminName || 'Admin'}
+            </p>
+            <p style={{ fontSize: 10, color: '#6B7A8D', margin: 0, fontWeight: 500 }}>Administrator</p>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) { .hidden-mobile { display: none !important; } }
+      `}</style>
     </header>
   );
 };

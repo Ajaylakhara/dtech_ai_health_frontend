@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /departments
+
+Disallow: /admin-dashboard
+Disallow: /profile
+Disallow: /appointments
+Disallow: /appointment
+Disallow: /login
+Disallow: /signup

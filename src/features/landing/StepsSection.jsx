@@ -1,117 +1,135 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { FaUserPlus, FaCalendarCheck, FaStethoscope, FaHeartbeat } from 'react-icons/fa';
-import SectionWrapper, { SectionHeading } from '../../components/ui/SectionWrapper';
+import { motion } from 'framer-motion';
+import { FiCalendar, FiUserCheck, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const steps = [
   {
-    icon: FaUserPlus,
-    num: '01',
-    title: 'Register',
-    desc: 'Create your account and complete your health profile in under 2 minutes.',
-    color: '#3B82F6',
+    number: '01',
+    icon: <FiCalendar size={28} />,
+    title: 'Book an Appointment',
+    description: 'Schedule your visit online in minutes — choose your preferred doctor, date, and time slot.',
   },
   {
-    icon: FaCalendarCheck,
-    num: '02',
-    title: 'Book Appointment',
-    desc: 'Browse verified specialists and book a slot that fits your schedule instantly.',
-    color: '#8B5CF6',
+    number: '02',
+    icon: <FiUserCheck size={28} />,
+    title: 'Meet Your Specialist',
+    description: 'Consult with our board-certified experts in person or via teleconsultation from your home.',
   },
   {
-    icon: FaStethoscope,
-    num: '03',
-    title: 'Get Treatment',
-    desc: 'Consult in-person or via telehealth with our board-certified doctors.',
-    color: '#3B82F6',
-  },
-  {
-    icon: FaHeartbeat,
-    num: '04',
-    title: 'Track Health',
-    desc: 'Monitor recovery, access medical history, and receive proactive follow-ups.',
-    color: '#8B5CF6',
+    number: '03',
+    icon: <FiCheckCircle size={28} />,
+    title: 'Get Your Treatment',
+    description: 'Receive a personalised treatment plan with follow-up care and ongoing health monitoring.',
   },
 ];
 
 const StepsSection = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
   return (
-    <SectionWrapper id="how-it-works" className="relative overflow-hidden">
-      {/* BG radial */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-blue-500/4 blur-3xl" />
-      </div>
+    <section style={{ background: '#FFFFFF', padding: '96px 24px', position: 'relative', overflow: 'hidden' }}>
+      {/* Background decoration */}
+      <div style={{
+        position: 'absolute', right: -100, top: '50%', transform: 'translateY(-50%)',
+        width: 500, height: 500, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(23,60,99,0.04) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
 
-      <SectionHeading
-        label="How it works"
-        title="Four Steps to Better Care"
-        subtitle="From signup to recovery — a seamless experience for every patient."
-      />
-
-      <div ref={ref} className="relative">
-        {/* Animated connecting line */}
-        <div className="hidden lg:block absolute top-[34px] left-[calc(12.5%+32px)] right-[calc(12.5%+32px)] h-[2px] bg-white/5 rounded-full">
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : {}}
-            transition={{ duration: 1.4, ease: 'easeOut', delay: 0.5 }}
-            className="h-full origin-left rounded-full"
-            style={{ background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #3B82F6, #8B5CF6)' }}
-          />
+      <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 72 }}>
+          <span className="section-tag">How It Works</span>
+          <h2 className="section-title" style={{ marginTop: 12, marginBottom: 16 }}>
+            Simple Steps to{' '}
+            <span style={{ fontStyle: 'italic', color: '#173C63' }}>Better Health</span>
+          </h2>
+          <p className="section-subtitle" style={{ margin: '0 auto' }}>
+            Getting quality healthcare has never been easier. Our streamlined process ensures you spend less time waiting and more time healing.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {steps.map((step, i) => {
-            const Icon = step.icon;
-            return (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, y: 40 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.25 + i * 0.15, duration: 0.55, ease: 'easeOut' }}
-                className="flex flex-col items-center text-center group"
-              >
-                {/* Icon circle */}
-                <div className="relative mb-8">
-                  <div
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center relative z-10
-                      transition-all duration-300 group-hover:scale-110"
-                    style={{
-                      background: `${step.color}18`,
-                      border: `1.5px solid ${step.color}35`,
-                    }}
-                  >
-                    <Icon className="text-2xl" style={{ color: step.color }} />
-                  </div>
-                  {/* Step badge */}
-                  <span
-                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full text-[11px] font-black
-                      flex items-center justify-center text-white shadow-md"
-                    style={{ background: step.color }}
-                  >
-                    {i + 1}
-                  </span>
-                </div>
+        {/* Steps */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, position: 'relative' }} className="steps-grid">
+          {/* Connector line (desktop only) */}
+          <div style={{
+            position: 'absolute',
+            top: 48, left: '16.67%', right: '16.67%',
+            height: 2,
+            borderTop: '2px dashed #CBD5E0',
+            zIndex: 0,
+          }} className="steps-connector" />
 
-                <span className="text-xs font-black tracking-widest mb-2" style={{ color: step.color }}>
-                  {step.num}
+          {steps.map((step, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.18, duration: 0.55 }}
+              style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                textAlign: 'center', padding: '0 32px',
+                position: 'relative', zIndex: 1,
+              }}
+            >
+              {/* Step number circle */}
+              <div style={{
+                width: 88, height: 88, borderRadius: '50%',
+                background: i === 1 ? '#173C63' : '#FFFFFF',
+                border: `3px solid ${i === 1 ? '#173C63' : '#E8EDF4'}`,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 28,
+                boxShadow: i === 1 ? '0 8px 32px rgba(23,60,99,0.3)' : '0 4px 16px rgba(23,60,99,0.08)',
+                transition: 'all 0.3s',
+                color: i === 1 ? '#fff' : '#173C63',
+                gap: 2,
+              }}>
+                {step.icon}
+                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', opacity: 0.7 }}>
+                  {step.number}
                 </span>
-                <h3
-                  className="text-white font-black text-xl mb-3 leading-tight"
-                  style={{ fontFamily: 'var(--font-title)' }}
-                >
-                  {step.title}
-                </h3>
-                <p className="text-slate-400 text-sm leading-relaxed max-w-[200px]">{step.desc}</p>
-              </motion.div>
-            );
-          })}
+              </div>
+
+              {/* Title */}
+              <h3 style={{
+                fontFamily: "'Lora', serif",
+                fontSize: 20, fontWeight: 700,
+                color: '#0D1B2A',
+                marginBottom: 12, marginTop: 0,
+              }}>
+                {step.title}
+              </h3>
+
+              {/* Description */}
+              <p style={{
+                fontSize: 14, color: '#6B7A8D',
+                lineHeight: 1.7, margin: 0,
+              }}>
+                {step.description}
+              </p>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{ textAlign: 'center', marginTop: 56 }}
+        >
+          <Link to="/appointments" className="btn-primary">
+            Book Your Appointment <FiArrowRight />
+          </Link>
+        </motion.div>
       </div>
-    </SectionWrapper>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .steps-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .steps-connector { display: none !important; }
+        }
+      `}</style>
+    </section>
   );
 };
 

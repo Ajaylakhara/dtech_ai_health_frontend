@@ -1,53 +1,135 @@
 import { FaCalendarAlt, FaArrowRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useState } from 'react';
 
 const CalendarWidget = () => {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  const today = new Date().getDate();
   const dates = Array.from({ length: 31 }, (_, i) => i + 1);
-  
+
+  const monthName = currentMonth.toLocaleString('default', { month: 'long' });
+  const year = currentMonth.getFullYear();
+
   return (
-    <div className="glass border border-white/5 rounded-[2rem] p-6 shadow-2xl flex-1 select-none flex flex-col gap-5">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
-            <FaCalendarAlt className="text-slate-300" />
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #E8EDF4',
+      borderRadius: 20,
+      padding: 24,
+      boxShadow: '0 4px 24px rgba(23,60,99,0.04)',
+      flex: 1,
+      userSelect: 'none',
+      display: 'flex', flexDirection: 'column', gap: 20,
+    }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: 'rgba(74,144,226,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <FaCalendarAlt style={{ color: '#4A90E2', fontSize: 14 }} />
           </div>
-          <h2 className="text-white text-base font-bold">Calendar</h2>
+          <h2 style={{ fontFamily: "'Lora', serif", fontSize: 15, fontWeight: 700, color: '#0D1B2A', margin: 0 }}>
+            Calendar
+          </h2>
         </div>
-        <button className="flex items-center gap-2 text-slate-400 font-bold text-xs hover:text-white transition-colors">
-          Open <FaArrowRight className="text-[10px]" />
+        <button style={{
+          display: 'flex', alignItems: 'center', gap: 5,
+          fontSize: 12, fontWeight: 600, color: '#4A90E2',
+          background: 'none', border: 'none', cursor: 'pointer',
+        }}>
+          Open <FaArrowRight style={{ fontSize: 9 }} />
         </button>
       </div>
 
-      <div className="bg-white/5 rounded-3xl p-5 border border-white/5">
-        <div className="flex justify-between items-center mb-5">
-           <button className="w-7 h-7 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors text-slate-400">
-             <FaChevronLeft className="text-[8px]" />
-           </button>
-           <span className="text-white font-black text-sm select-none">May {new Date().getFullYear()}</span>
-           <button className="w-7 h-7 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors text-slate-400">
-             <FaChevronRight className="text-[8px]" />
-           </button>
+      {/* Calendar body */}
+      <div style={{
+        background: '#F8FAFC',
+        borderRadius: 14,
+        padding: 18,
+        border: '1px solid #E8EDF4',
+      }}>
+        {/* Month nav */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <button
+            onClick={() => setCurrentMonth(m => new Date(m.getFullYear(), m.getMonth() - 1))}
+            style={{
+              width: 26, height: 26, borderRadius: 8,
+              background: '#FFFFFF',
+              border: '1px solid #E8EDF4',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#6B7A8D', cursor: 'pointer', transition: 'all 0.2s',
+            }}
+          >
+            <FaChevronLeft style={{ fontSize: 8 }} />
+          </button>
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#0D1B2A' }}>
+            {monthName} {year}
+          </span>
+          <button
+            onClick={() => setCurrentMonth(m => new Date(m.getFullYear(), m.getMonth() + 1))}
+            style={{
+              width: 26, height: 26, borderRadius: 8,
+              background: '#FFFFFF',
+              border: '1px solid #E8EDF4',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#6B7A8D', cursor: 'pointer', transition: 'all 0.2s',
+            }}
+          >
+            <FaChevronRight style={{ fontSize: 8 }} />
+          </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-2 text-center text-[10px] font-black tracking-wider uppercase text-slate-500 mb-3 select-none">
-          {days.map(d => <div key={d}>{d}</div>)}
+        {/* Day labels */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)',
+          gap: 4, textAlign: 'center', marginBottom: 8,
+        }}>
+          {days.map(d => (
+            <div key={d} style={{ fontSize: 9, fontWeight: 700, color: '#9DAAB8', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              {d}
+            </div>
+          ))}
         </div>
-        
-        <div className="grid grid-cols-7 gap-y-3 gap-x-2 text-center text-xs font-bold text-white select-none">
-          <div className="text-slate-600">29</div>
-          <div className="text-slate-600">30</div>
+
+        {/* Dates */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '6px 4px', textAlign: 'center' }}>
+          {/* Previous month filler */}
+          <div style={{ fontSize: 11, color: '#CBD5E1' }}>29</div>
+          <div style={{ fontSize: 11, color: '#CBD5E1' }}>30</div>
+
           {dates.map(date => {
-             const isHighlighted = date === 13;
-             return (
-               <div 
-                  key={date} 
-                  className={`w-7 h-7 mx-auto flex items-center justify-center rounded-xl cursor-pointer transition-all ${
-                    isHighlighted ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 scale-110 font-black' : 'hover:bg-white/5 text-slate-300'
-                  }`}
-               >
-                 {date}
-               </div>
-             )
+            const isToday = date === today;
+            const hasAppt = [5, 12, 18, 23, 27].includes(date);
+            return (
+              <div
+                key={date}
+                style={{
+                  width: 26, height: 26,
+                  margin: '0 auto',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  borderRadius: 8,
+                  fontSize: 11, fontWeight: isToday ? 700 : 600,
+                  color: isToday ? '#fff' : hasAppt ? '#4A90E2' : '#6B7A8D',
+                  background: isToday ? '#173C63' : 'transparent',
+                  boxShadow: isToday ? '0 4px 12px rgba(23,60,99,0.2)' : 'none',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {date}
+                {hasAppt && !isToday && (
+                  <span style={{
+                    position: 'absolute', bottom: 1,
+                    width: 4, height: 4, borderRadius: '50%',
+                    background: '#4A90E2',
+                  }} />
+                )}
+              </div>
+            );
           })}
         </div>
       </div>

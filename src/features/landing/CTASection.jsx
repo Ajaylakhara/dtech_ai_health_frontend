@@ -1,83 +1,155 @@
 import { motion } from 'framer-motion';
+import { FiCalendar, FiPhone, FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { FaArrowRight } from 'react-icons/fa';
-import Button from '../../components/ui/Button';
 
-const CTASection = () => (
-  <section id="cta" className="w-full py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-    {/* Strong radial glow background */}
-    <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full
-        bg-blue-500/10 blur-[100px]" />
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] rounded-full
-        bg-blue-500/6 blur-3xl" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[350px] h-[350px] rounded-full
-        bg-purple-500/8 blur-3xl" />
-    </div>
+const CTASection = () => {
+  return (
+    <section style={{ background: '#F4F7FB', padding: '96px 24px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={{
+            background: 'linear-gradient(135deg, #173C63 0%, #0F2640 60%, #1A3A5C 100%)',
+            borderRadius: 28,
+            padding: '72px 64px',
+            position: 'relative',
+            overflow: 'hidden',
+            textAlign: 'center',
+          }}
+        >
+          {/* Decorative circles */}
+          <div style={{
+            position: 'absolute', top: -80, right: -80,
+            width: 280, height: 280, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.04)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: -60, left: -60,
+            width: 220, height: 220, borderRadius: '50%',
+            background: 'rgba(74,144,226,0.12)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', top: '30%', left: '10%',
+            width: 120, height: 120, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.03)',
+            pointerEvents: 'none',
+          }} />
+          {/* Dot grid */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
+          }} />
 
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="max-w-4xl mx-auto text-center relative z-10
-        rounded-3xl p-12 md:p-20 border border-white/10"
-      style={{
-        background:
-          'linear-gradient(135deg, rgba(59,130,246,0.07) 0%, rgba(11,17,32,0.85) 50%, rgba(139,92,246,0.07) 100%)',
-        backdropFilter: 'blur(24px)',
-      }}
-    >
-      {/* Top badge */}
-      <motion.span
-        initial={{ opacity: 0, scale: 0.85 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.2 }}
-        className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-8
-          bg-blue-500/12 text-blue-400 border border-blue-500/25"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
-        </span>
-        Start Free — No Card Required
-      </motion.span>
+          {/* Content */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            {/* Badge */}
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '7px 18px',
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: 50,
+              marginBottom: 28,
+              color: '#fff',
+              fontSize: 13,
+              fontWeight: 600,
+            }}>
+              <div style={{
+                width: 7, height: 7, borderRadius: '50%',
+                background: '#27AE60',
+                boxShadow: '0 0 0 3px rgba(39,174,96,0.3)',
+              }} />
+              Available 24/7 — No Waiting
+            </div>
 
-      {/* Headline */}
-      <h2
-        className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-[1.15]"
-        style={{ fontFamily: 'var(--font-title)' }}
-      >
-        Ready to Transform{' '}
-        <span className="text-gradient">Healthcare?</span>
-      </h2>
+            {/* Heading */}
+            <h2 style={{
+              fontFamily: "'Lora', serif",
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              fontWeight: 700,
+              color: '#fff',
+              lineHeight: 1.2,
+              letterSpacing: '-0.025em',
+              margin: '0 0 20px',
+            }}>
+              Ready to Take Control of{' '}
+              <span style={{ fontStyle: 'italic', color: '#7BB8F0' }}>Your Health?</span>
+            </h2>
 
-      {/* Sub-text */}
-      <p className="text-slate-400 text-[17px] mb-12 max-w-2xl mx-auto leading-[1.75]">
-        Join 450+ hospitals already transforming patient care with our AI-powered platform.
-      </p>
+            {/* Subtitle */}
+            <p style={{
+              fontSize: 17,
+              color: 'rgba(255,255,255,0.7)',
+              lineHeight: 1.7,
+              margin: '0 auto 44px',
+              maxWidth: 560,
+            }}>
+              Join over 50,000 patients who trust MediCare for their healthcare needs. Book your first consultation today — the first step to better health starts here.
+            </p>
 
-      {/* CTA Buttons */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Link to="/signup">
-          <Button variant="primary" className="px-10 py-4 text-base">
-            Start Free Trial <FaArrowRight className="text-sm" />
-          </Button>
-        </Link>
-        <Button variant="glass" className="px-10 py-4 text-base">
-          Book a Demo
-        </Button>
+            {/* Buttons */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+              <Link
+                to="/appointments"
+                aria-label="Book appointment — call to action section"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '13px 30px',
+                  borderRadius: 50,
+                  background: '#fff',
+                  color: '#173C63',
+                  fontSize: 15, fontWeight: 700,
+                  textDecoration: 'none',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                  transition: 'all 0.25s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.25)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.2)'; }}
+              >
+                <FiCalendar size={16} /> Book Appointment <FiArrowRight size={15} />
+              </Link>
+              <a
+                href="tel:+18001234567"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '12px 30px',
+                  borderRadius: 50,
+                  background: 'transparent',
+                  color: '#fff',
+                  fontSize: 15, fontWeight: 600,
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  textDecoration: 'none',
+                  transition: 'all 0.25s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+              >
+                <FiPhone size={16} /> Emergency: +1 (800) 123-4567
+              </a>
+            </div>
+
+            {/* Trust line */}
+            <div style={{
+              marginTop: 36,
+              display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap',
+            }}>
+              {['No Credit Card Required', 'Cancel Anytime', 'HIPAA Compliant'].map((txt, i) => (
+                <span key={i} style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ color: '#27AE60', fontSize: 16 }}>✓</span> {txt}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </div>
-
-      {/* Trust items */}
-      <div className="flex flex-wrap items-center justify-center gap-6 mt-10 text-sm text-slate-400">
-        {['✓  14-day free trial', '✓  Full features included', '✓  Cancel anytime'].map((t) => (
-          <span key={t} className="text-slate-400 text-sm">{t}</span>
-        ))}
-      </div>
-    </motion.div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default CTASection;

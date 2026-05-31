@@ -1,153 +1,157 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlus, FaMinus, FaPhoneAlt, FaEnvelope, FaClock } from 'react-icons/fa';
-import SectionWrapper, { SectionHeading } from '../../components/ui/SectionWrapper';
+import { FiChevronDown, FiPlus, FiMinus } from 'react-icons/fi';
 
 const faqs = [
   {
-    question: 'Is my data secure with DTech AI?',
-    answer:
-      'Yes. We are fully HIPAA-compliant, use end-to-end encryption, and run regular third-party security audits. Your health data is never sold or shared.',
+    question: 'How do I book an appointment online?',
+    answer: "Booking is simple. Click the 'Book Appointment' button, choose your preferred specialist and department, select an available date and time, and confirm with your details. You'll receive an instant confirmation via email and SMS.",
   },
   {
-    question: 'Can I integrate with existing systems?',
-    answer:
-      'Absolutely. We provide REST APIs and native integrations with major EHR systems including Epic, Cerner, and Athena — with a dedicated onboarding engineer.',
+    question: 'Can I consult with a doctor via video call?',
+    answer: 'Yes! We offer teleconsultation services for all our registered patients. Once your appointment is confirmed, you will receive a secure video link to connect with your doctor from the comfort of your home.',
   },
   {
-    question: 'Do you offer 24/7 patient support?',
-    answer:
-      'Pro and Enterprise plans include 24/7 priority support with a guaranteed response under 2 hours. Basic plan gets business-hour email support.',
+    question: 'Are my health records kept private and secure?',
+    answer: 'Absolutely. All patient data is encrypted and stored on HIPAA-compliant secure servers. Only authorised medical staff can access your records, and you have full control over who can view your information.',
   },
   {
-    question: 'Is there a free trial available?',
-    answer:
-      'Yes — every plan starts with a 14-day free trial. No credit card required. You get full access to all Pro features during the trial period.',
+    question: 'What insurance plans do you accept?',
+    answer: 'We are empanelled with all major insurance providers including Star Health, HDFC ERGO, Niva Bupa, Bajaj Allianz, and government schemes like PMJAY. Contact our billing team to verify your specific plan coverage.',
   },
   {
-    question: 'How do I get started?',
-    answer:
-      'Click "Start Free Trial", create your account, and follow the quick setup wizard. Most hospitals are fully onboarded within 48 hours.',
+    question: 'How do I access my test reports and prescriptions?',
+    answer: 'All lab reports, prescriptions, and visit summaries are available on your personal health dashboard within 24 hours. You can download, print, or share them directly from your account.',
   },
   {
-    question: 'Can I upgrade or downgrade my plan?',
-    answer:
-      'Yes, at any time. Plan changes take effect immediately and billing is prorated. No lock-in contracts on monthly plans.',
+    question: 'What are your emergency services and operating hours?',
+    answer: 'Our Emergency Department operates 24 hours a day, 7 days a week, 365 days a year. Routine OPD hours are 8 AM – 8 PM. For emergencies, call our hotline: +1 (800) 123-4567.',
   },
 ];
 
-const FAQSection = () => {
-  const [open, setOpen] = useState(0);
+const FAQItem = ({ faq, index }) => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <SectionWrapper id="faq">
-      <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.07, duration: 0.4 }}
+      style={{
+        border: `1px solid ${open ? 'rgba(23,60,99,0.2)' : '#E8EDF4'}`,
+        borderRadius: 14,
+        overflow: 'hidden',
+        background: open ? 'rgba(23,60,99,0.02)' : '#fff',
+        transition: 'all 0.3s',
+        boxShadow: open ? '0 4px 20px rgba(23,60,99,0.07)' : 'none',
+      }}
+    >
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: '100%', background: 'none', border: 'none',
+          padding: '22px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          cursor: 'pointer', textAlign: 'left', gap: 16,
+        }}
+      >
+        <span style={{
+          fontFamily: "'Lora', serif",
+          fontSize: 16, fontWeight: 600,
+          color: open ? '#173C63' : '#0D1B2A',
+          lineHeight: 1.4, flex: 1,
+        }}>
+          {faq.question}
+        </span>
+        <div style={{
+          width: 32, height: 32, borderRadius: '50%',
+          background: open ? '#173C63' : '#F4F7FB',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0,
+          transition: 'all 0.3s',
+        }}>
+          {open
+            ? <FiMinus size={14} style={{ color: '#fff' }} />
+            : <FiPlus size={14} style={{ color: '#173C63' }} />
+          }
+        </div>
+      </button>
 
-        {/* ── Left ───────────────────────────────── */}
-        <div>
-          <SectionHeading label="FAQ" title="Common Questions" />
-          <p className="text-slate-400 mb-8 leading-[1.75] -mt-4">
-            Can't find what you're looking for? Our support team is here 24/7.
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{
+              padding: '0 24px 22px',
+              fontSize: 14, color: '#6B7A8D',
+              lineHeight: 1.75,
+              borderTop: '1px solid #F0F4F8',
+              paddingTop: 16,
+            }}>
+              {faq.answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
+const FAQSection = () => {
+  return (
+    <section style={{ background: '#FFFFFF', padding: '96px 24px' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <span className="section-tag">FAQ</span>
+          <h2 className="section-title" style={{ marginTop: 12, marginBottom: 16 }}>
+            Frequently Asked{' '}
+            <span style={{ fontStyle: 'italic', color: '#173C63' }}>Questions</span>
+          </h2>
+          <p className="section-subtitle" style={{ margin: '0 auto' }}>
+            Everything you need to know about our services, appointments, and patient care.
           </p>
-
-          {/* Help cards */}
-          <div className="space-y-4">
-            {[
-              {
-                Icon: FaPhoneAlt,
-                color: '#3B82F6',
-                title: 'Call Us',
-                sub: '+1 (800) 123-4567',
-              },
-              {
-                Icon: FaEnvelope,
-                color: '#8B5CF6',
-                title: 'Email Support',
-                sub: 'support@dtech.ai',
-              },
-              {
-                Icon: FaClock,
-                color: '#3B82F6',
-                title: 'Response Time',
-                sub: 'Under 2 hours (Pro+)',
-              },
-            ].map(({ Icon, color, title, sub }) => (
-              <div
-                key={title}
-                className="flex items-center gap-4 p-4 rounded-2xl border border-white/8
-                  bg-white/4 hover:border-blue-500/25 hover:bg-white/7 transition-all duration-200 cursor-default"
-              >
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: `${color}18` }}
-                >
-                  <Icon style={{ color }} className="text-sm" />
-                </div>
-                <div>
-                  <p className="text-white font-bold text-sm">{title}</p>
-                  <p className="text-slate-400 text-xs mt-0.5">{sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <button className="mt-8 text-sm text-blue-400 font-bold hover:underline flex items-center gap-1">
-            Contact Support →
-          </button>
         </div>
 
-        {/* ── Accordion ──────────────────────────── */}
-        <div className="space-y-3">
-          {faqs.map((faq, i) => {
-            const isOpen = open === i;
-            return (
-              <div
-                key={i}
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden
-                  ${isOpen
-                    ? 'border-blue-500/40 bg-blue-500/5'
-                    : 'border-white/8 bg-white/3 hover:border-white/15'
-                  }`}
-              >
-                <button
-                  aria-expanded={isOpen}
-                  onClick={() => setOpen(isOpen ? -1 : i)}
-                  className="w-full flex items-center justify-between px-6 py-5 text-left focus:outline-none"
-                >
-                  <span
-                    className={`font-semibold text-sm leading-relaxed transition-colors duration-200 ${
-                      isOpen ? 'text-white' : 'text-slate-400'
-                    }`}
-                  >
-                    {faq.question}
-                  </span>
-                  <motion.span
-                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-200
-                      ${isOpen ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white' : 'bg-white/10 text-white/50'}`}
-                  >
-                    {isOpen ? <FaMinus className="text-xs" /> : <FaPlus className="text-xs" />}
-                  </motion.span>
-                </button>
+        {/* FAQ Items */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {faqs.map((faq, i) => (
+            <FAQItem key={i} faq={faq} index={i} />
+          ))}
+        </div>
 
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      key="content"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
-                    >
-                      <p className="px-6 pb-6 text-slate-400 text-sm leading-[1.75]">{faq.answer}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
+        {/* Still have questions */}
+        <div style={{
+          marginTop: 48,
+          padding: '32px',
+          background: '#F4F7FB',
+          borderRadius: 20,
+          textAlign: 'center',
+          border: '1px solid #E8EDF4',
+        }}>
+          <p style={{ fontFamily: "'Lora', serif", fontSize: 18, fontWeight: 700, color: '#0D1B2A', margin: '0 0 8px' }}>
+            Still have questions?
+          </p>
+          <p style={{ fontSize: 14, color: '#6B7A8D', margin: '0 0 20px', lineHeight: 1.6 }}>
+            Our support team is available 24/7 to assist you with any questions.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <a href="tel:+18001234567" className="btn-primary" style={{ fontSize: 14 }}>
+              📞 Call Us Now
+            </a>
+            <a href="mailto:support@medicare.com" className="btn-outline" style={{ fontSize: 14 }}>
+              ✉ Send an Email
+            </a>
+          </div>
         </div>
       </div>
-    </SectionWrapper>
+    </section>
   );
 };
 

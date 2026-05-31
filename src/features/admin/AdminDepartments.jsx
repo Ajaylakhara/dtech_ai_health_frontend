@@ -1,9 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 import DepartmentsTable from './DepartmentsTable';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaHospital } from 'react-icons/fa';
+import { FiActivity, FiUsers, FiDollarSign, FiGrid } from 'react-icons/fi';
 import { useEffect } from 'react';
 import { fetchDepartments } from '../../redux/thunks/departmentThunks';
+import { motion } from 'framer-motion';
 
 const AdminDepartments = () => {
   const { departments, status } = useSelector((state) => state.departments);
@@ -16,26 +18,154 @@ const AdminDepartments = () => {
 
   const onAddDeptClick = () => setIsQuickActionOpen(true);
 
+  const totalDepts = departments?.length ?? 0;
+  const avgFee = departments?.length
+    ? Math.round(departments.reduce((sum, d) => sum + (d.consultationFee || 0), 0) / departments.length)
+    : 0;
+
+  const statCards = [
+    {
+      label: 'Total Departments',
+      value: totalDepts,
+      icon: <FiGrid size={20} />,
+      color: '#4A90E2',
+      bg: 'rgba(74,144,226,0.1)',
+      trend: 'Active units',
+    },
+    {
+      label: 'Avg. Consultation Fee',
+      value: `₹${avgFee}`,
+      icon: <FiDollarSign size={20} />,
+      color: '#27AE60',
+      bg: 'rgba(39,174,96,0.1)',
+      trend: 'Per department',
+    },
+    {
+      label: 'Active Departments',
+      value: totalDepts,
+      icon: <FiActivity size={20} />,
+      color: '#8B5CF6',
+      bg: 'rgba(139,92,246,0.1)',
+      trend: 'Fully operational',
+    },
+    {
+      label: 'Total Staff',
+      value: '—',
+      icon: <FiUsers size={20} />,
+      color: '#F59E0B',
+      bg: 'rgba(245,158,11,0.1)',
+      trend: 'Across all depts',
+    },
+  ];
+
   return (
-    <div className="flex flex-col gap-6 mt-2 relative">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-white text-2xl font-bold">Department Management</h1>
-        <button 
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+
+      {/* Page Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <h1 style={{
+            fontFamily: "'Lora', serif",
+            fontSize: 24, fontWeight: 700,
+            color: '#0D1B2A', margin: '0 0 4px',
+          }}>
+            Department <span style={{ color: '#173C63' }}>Management</span>
+          </h1>
+          <p style={{ fontSize: 13, color: '#6B7A8D', margin: 0, fontWeight: 500 }}>
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
+        <button
           onClick={onAddDeptClick}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-2.5 rounded-full font-bold shadow-lg shadow-blue-500/25 flex items-center gap-2 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-200"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 7,
+            padding: '10px 20px',
+            background: '#173C63',
+            color: '#fff', border: 'none', borderRadius: 50,
+            fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(23,60,99,0.15)',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(23,60,99,0.25)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(23,60,99,0.15)'; }}
         >
-          <FaPlus className="text-xs" /> Add New Department
+          <FaPlus size={12} /> Add New Department
         </button>
       </div>
 
+      {/* Stat Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}
+        className="admin-stat-grid">
+        {statCards.map((card, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.08, duration: 0.4 }}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #E8EDF4',
+              borderRadius: 16,
+              padding: '20px',
+              boxShadow: '0 4px 16px rgba(23,60,99,0.04)',
+              display: 'flex', flexDirection: 'column', gap: 12,
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: 12,
+                background: card.bg,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: card.color,
+              }}>
+                {card.icon}
+              </div>
+              <span style={{
+                fontSize: 10, fontWeight: 700,
+                color: card.color,
+                background: card.bg,
+                padding: '3px 8px', borderRadius: 50,
+                letterSpacing: '0.04em',
+              }}>
+                ↑ Live
+              </span>
+            </div>
+            <div>
+              <div style={{ fontFamily: "'Lora', serif", fontSize: 28, fontWeight: 700, color: '#0D1B2A', lineHeight: 1, marginBottom: 4 }}>
+                {card.value}
+              </div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#3D4D5C', marginBottom: 2 }}>{card.label}</div>
+              <div style={{ fontSize: 11, color: '#6B7A8D' }}>{card.trend}</div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Departments Table */}
       {status === 'loading' ? (
-        <div className="text-blue-400 p-8 font-bold">Loading Departments...</div>
+        <div style={{
+          background: '#FFFFFF', border: '1px solid #E8EDF4', borderRadius: 16,
+          padding: 48, textAlign: 'center',
+          boxShadow: '0 4px 16px rgba(23,60,99,0.04)',
+        }}>
+          <div style={{ fontSize: 14, color: '#4A90E2', fontWeight: 700 }}>Loading Departments...</div>
+        </div>
       ) : (
-        <DepartmentsTable departments={departments} onEdit={handleEditDepartment} />
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.4 }}
+        >
+          <DepartmentsTable departments={departments} onEdit={handleEditDepartment} />
+        </motion.div>
       )}
+
+      <style>{`
+        @media (max-width: 1100px) { .admin-stat-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 600px)  { .admin-stat-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   );
 };
 
 export default AdminDepartments;
-

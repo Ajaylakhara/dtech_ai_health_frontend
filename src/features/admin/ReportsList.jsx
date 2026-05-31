@@ -1,48 +1,104 @@
 import { FaDownload, FaArrowRight } from 'react-icons/fa';
 
 const reports = [
-  { id: 1, name: 'Hanah Brown', size: '3.6 Mb', tag: 'AI Analysis' },
-  { id: 2, name: 'Eliza Smith', size: '2.1 Mb', tag: 'Pathology' },
-  { id: 3, name: 'Karen McBeth', size: '4.5 Mb', tag: 'AI Insight' },
-  { id: 4, name: 'John Marston', size: '1.2 Mb', tag: 'General' },
-  { id: 5, name: 'Jim Carr', size: '3.3 Mb', tag: 'Diagnostic' },
+  { id: 1, name: 'Hanah Brown', size: '3.6 Mb', tag: 'AI Analysis', tagColor: '#4A90E2' },
+  { id: 2, name: 'Eliza Smith', size: '2.1 Mb', tag: 'Pathology', tagColor: '#27AE60' },
+  { id: 3, name: 'Karen McBeth', size: '4.5 Mb', tag: 'AI Insight', tagColor: '#8B5CF6' },
+  { id: 4, name: 'John Marston', size: '1.2 Mb', tag: 'General', tagColor: '#F59E0B' },
+  { id: 5, name: 'Jim Carr', size: '3.3 Mb', tag: 'Diagnostic', tagColor: '#EB5757' },
 ];
 
 const ReportsList = () => {
   return (
-    <div className="glass border border-white/5 rounded-[2rem] p-6 shadow-2xl flex-1 select-none flex flex-col gap-5">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
-            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="text-slate-300" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #E8EDF4',
+      borderRadius: 20,
+      padding: 24,
+      boxShadow: '0 4px 24px rgba(23,60,99,0.04)',
+      flex: 1,
+      userSelect: 'none',
+      display: 'flex', flexDirection: 'column', gap: 20,
+    }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: 'rgba(74,144,226,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg stroke="#4A90E2" fill="none" strokeWidth="2" viewBox="0 0 24 24" height="15" width="15">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
           </div>
-          <h2 className="text-white text-base font-bold">Recent Reports</h2>
+          <h2 style={{ fontFamily: "'Lora', serif", fontSize: 15, fontWeight: 700, color: '#0D1B2A', margin: 0 }}>
+            Recent Reports
+          </h2>
         </div>
-        <button className="flex items-center gap-2 text-slate-400 font-bold text-xs hover:text-white transition-colors select-none">
-          View All <FaArrowRight className="text-[10px]" />
+        <button style={{
+          display: 'flex', alignItems: 'center', gap: 5,
+          fontSize: 12, fontWeight: 600, color: '#4A90E2',
+          background: 'none', border: 'none', cursor: 'pointer',
+        }}>
+          View All <FaArrowRight style={{ fontSize: 9 }} />
         </button>
       </div>
 
-      <div className="flex flex-col gap-3">
-        {reports.map((report) => (
-          <div key={report.id} className="flex justify-between items-center border-b border-white/5 pb-3.5 last:border-0 last:pb-0 hover:bg-white/5 p-2 rounded-xl transition-all">
-            <div className="flex items-center gap-4">
-              <span className="text-slate-500 font-bold text-sm">{report.id}.</span>
-              <div className="flex flex-col gap-0.5">
-                <span className="text-white font-bold text-sm">{report.name}</span>
-                <span className="text-[10px] font-black tracking-wide text-gradient uppercase">{report.tag}</span>
+      {/* List */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {reports.map(report => (
+          <div key={report.id} style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '10px 12px',
+            borderRadius: 10,
+            borderBottom: '1px solid #E8EDF4',
+            transition: 'background 0.2s',
+            cursor: 'pointer',
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = '#F8FAFC'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#9DAAB8', minWidth: 16 }}>{report.id}.</span>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#0D1B2A', marginBottom: 2 }}>{report.name}</div>
+                <span style={{
+                  fontSize: 10, fontWeight: 700,
+                  color: report.tagColor,
+                  background: `${report.tagColor}18`,
+                  padding: '2px 8px', borderRadius: 50,
+                  letterSpacing: '0.04em', textTransform: 'uppercase',
+                }}>
+                  {report.tag}
+                </span>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-               <span className="text-slate-400 font-bold text-xs">{report.size}</span>
-               <div className="flex gap-2">
-                 <button className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/10 flex items-center justify-center hover:bg-blue-500/20 transition-all">
-                   <FaDownload className="text-[10px]" />
-                 </button>
-                 <button className="w-8 h-8 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white flex items-center justify-center hover:opacity-90 transition-all select-none">
-                   <FaArrowRight className="text-[10px]" />
-                 </button>
-               </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#6B7A8D' }}>{report.size}</span>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button style={{
+                  width: 30, height: 30, borderRadius: 8,
+                  background: 'rgba(74,144,226,0.1)',
+                  border: '1px solid rgba(74,144,226,0.15)',
+                  color: '#4A90E2',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', transition: 'all 0.2s',
+                }}>
+                  <FaDownload style={{ fontSize: 10 }} />
+                </button>
+                <button style={{
+                  width: 30, height: 30, borderRadius: 8,
+                  background: '#173C63',
+                  border: 'none', color: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', transition: 'all 0.2s',
+                }}>
+                  <FaArrowRight style={{ fontSize: 10 }} />
+                </button>
+              </div>
             </div>
           </div>
         ))}

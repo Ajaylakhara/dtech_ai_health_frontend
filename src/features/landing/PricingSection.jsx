@@ -1,187 +1,239 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaCheck, FaArrowRight } from 'react-icons/fa';
-import SectionWrapper, { SectionHeading } from '../../components/ui/SectionWrapper';
-import Button from '../../components/ui/Button';
+import { FiCheck, FiArrowRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const plans = [
   {
-    name: 'Basic',
-    monthlyPrice: 49,
-    yearlyPrice: 39,
-    color: '#94A3B8',
-    desc: 'For small clinics getting started.',
+    name: 'Basic Care',
+    price: '₹499',
+    period: '/month',
+    description: 'Perfect for individuals seeking routine healthcare management.',
     features: [
-      'Up to 5 doctors',
-      '500 appointments/month',
-      'Basic patient records',
-      'Email support',
-      'Standard analytics',
+      '2 Consultations per month',
+      'Digital Health Records',
+      'Lab Result Tracking',
+      'Email & SMS Reminders',
+      'Basic Health Dashboard',
     ],
     cta: 'Get Started',
-    popular: false,
+    highlighted: false,
   },
   {
-    name: 'Pro',
-    monthlyPrice: 129,
-    yearlyPrice: 99,
-    color: '#3B82F6',
-    desc: 'For growing hospitals and multi-specialty clinics.',
+    name: 'Premium Care',
+    price: '₹1,299',
+    period: '/month',
+    description: 'Comprehensive care for families with priority access to specialists.',
     features: [
-      'Up to 50 doctors',
-      'Unlimited appointments',
-      'Full EHR + billing',
-      'Priority support 24/7',
-      'Advanced AI analytics',
-      'Telehealth integration',
-      'Custom branding',
+      'Unlimited Consultations',
+      'Priority Appointments',
+      'Full Family Coverage (4 members)',
+      'Dedicated Care Manager',
+      'Home Visit (2 per month)',
+      '24/7 Teleconsultation',
+      'Advanced Analytics',
     ],
     cta: 'Start Free Trial',
-    popular: true,
+    highlighted: true,
+    badge: 'Most Popular',
   },
   {
-    name: 'Enterprise',
-    monthlyPrice: 349,
-    yearlyPrice: 279,
-    color: '#8B5CF6',
-    desc: 'For hospital networks and large healthcare systems.',
+    name: 'Corporate Care',
+    price: '₹4,999',
+    period: '/month',
+    description: 'Enterprise-grade health solutions for organisations and large families.',
     features: [
-      'Unlimited doctors',
-      'Unlimited everything',
-      'Full API access',
-      'Dedicated account manager',
-      'Custom integrations',
-      'SLA guarantee (99.9%)',
-      'On-premise option',
+      'Up to 20 Employees / Members',
+      'Onsite Health Camps',
+      'Dedicated Account Manager',
+      'Annual Health Check-ups',
+      'Mental Health Support',
+      'Emergency Response Priority',
     ],
     cta: 'Contact Sales',
-    popular: false,
+    highlighted: false,
   },
 ];
 
 const PricingSection = () => {
-  const [yearly, setYearly] = useState(false);
+  const [billing, setBilling] = useState('monthly');
 
   return (
-    <SectionWrapper id="pricing">
-      <SectionHeading
-        label="Pricing"
-        title="Simple, Transparent Pricing"
-        subtitle="No hidden fees. Upgrade or cancel any time."
-      />
+    <section style={{ background: '#FFFFFF', padding: '96px 24px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <span className="section-tag">Pricing Plans</span>
+          <h2 className="section-title" style={{ marginTop: 12, marginBottom: 16 }}>
+            Transparent &{' '}
+            <span style={{ fontStyle: 'italic', color: '#173C63' }}>Affordable</span> Plans
+          </h2>
+          <p className="section-subtitle" style={{ margin: '0 auto 32px' }}>
+            Choose a plan that fits your healthcare needs. No hidden charges, cancel anytime.
+          </p>
 
-      {/* Toggle */}
-      <div className="flex items-center justify-center gap-4 mb-14">
-        <span className={`text-sm font-semibold transition-colors ${!yearly ? 'text-white' : 'text-slate-400'}`}>
-          Monthly
-        </span>
-        <button
-          onClick={() => setYearly(!yearly)}
-          aria-label="Toggle billing period"
-          className="relative w-14 h-7 rounded-full bg-white/10 border border-white/15
-            flex items-center px-1 transition-all duration-300 hover:border-blue-500/50"
-        >
-          <motion.span
-            animate={{ x: yearly ? 28 : 0 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 shadow-md"
-          />
-        </button>
-        <span className={`text-sm font-semibold transition-colors ${yearly ? 'text-white' : 'text-slate-400'}`}>
-          Yearly
-          <span className="ml-2 px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black">
-            SAVE 20%
-          </span>
-        </span>
-      </div>
-
-      {/* Cards */}
-      <div className="grid md:grid-cols-3 gap-6 items-stretch">
-        {plans.map((plan, i) => (
-          <motion.div
-            key={plan.name}
-            initial={{ opacity: 0, y: 36 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.12, duration: 0.55 }}
-            whileHover={{ y: -8, scale: 1.02 }}
-            className={`relative rounded-2xl p-8 border flex flex-col transition-all duration-300
-              ${plan.popular
-                ? 'bg-[#141D2F] border-blue-500/50 shadow-[0_0_40px_rgba(59,130,246,0.2)]'
-                : 'glass border-white/10 hover:border-white/20'
-              }`}
-          >
-            {/* Popular badge */}
-            {plan.popular && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full
-                bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-black tracking-wide
-                shadow-lg shadow-blue-500/30">
-                ✦ Most Popular
-              </div>
-            )}
-
-            {/* Plan name */}
-            <div className="flex items-center gap-2 mb-4">
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-sm"
-                style={{ background: `${plan.color}20`, color: plan.color }}
+          {/* Billing toggle */}
+          <div style={{
+            display: 'inline-flex',
+            background: '#F4F7FB',
+            borderRadius: 50,
+            padding: 4,
+            border: '1px solid #E8EDF4',
+          }}>
+            {['monthly', 'yearly'].map(b => (
+              <button
+                key={b}
+                onClick={() => setBilling(b)}
+                style={{
+                  padding: '8px 24px',
+                  borderRadius: 50,
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  background: billing === b ? '#173C63' : 'transparent',
+                  color: billing === b ? '#fff' : '#6B7A8D',
+                  transition: 'all 0.25s',
+                }}
               >
-                {plan.name[0]}
-              </div>
-              <span className="text-white font-black text-xl">{plan.name}</span>
-            </div>
+                {b.charAt(0).toUpperCase() + b.slice(1)}
+                {b === 'yearly' && (
+                  <span style={{
+                    marginLeft: 6,
+                    background: 'rgba(39,174,96,0.15)',
+                    color: '#27AE60',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    letterSpacing: '0.05em',
+                  }}>
+                    -20%
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
 
-            <p className="text-slate-400 text-sm mb-6 leading-relaxed">{plan.desc}</p>
-
-            {/* Price */}
-            <div className="mb-8">
-              <div className="flex items-end gap-1">
-                <span
-                  className="text-5xl font-black text-white"
-                  style={{ fontFamily: 'var(--font-title)' }}
-                >
-                  ${yearly ? plan.yearlyPrice : plan.monthlyPrice}
-                </span>
-                <span className="text-slate-400 text-sm mb-1.5">/month</span>
-              </div>
-              {yearly && (
-                <p className="text-blue-400 text-xs font-bold mt-1">
-                  Billed yearly · Save ${(plan.monthlyPrice - plan.yearlyPrice) * 12}/yr
-                </p>
-              )}
-            </div>
-
-            {/* Features */}
-            <ul className="space-y-3 mb-8 flex-1">
-              {plan.features.map((feature) => (
-                <li key={feature} className="flex items-start gap-3 text-sm">
-                  <FaCheck
-                    className="mt-0.5 flex-shrink-0 text-xs"
-                    style={{ color: plan.color }}
-                  />
-                  <span className="text-slate-300">{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            {/* CTA */}
-            <Button
-              variant={plan.popular ? 'primary' : 'glass'}
-              className="w-full py-3.5"
+        {/* Pricing Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, alignItems: 'start' }} className="pricing-grid">
+          {plans.map((plan, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.12, duration: 0.5 }}
+              style={{
+                borderRadius: 24,
+                padding: plan.highlighted ? '36px 32px' : '32px 32px',
+                background: plan.highlighted ? '#173C63' : '#fff',
+                border: plan.highlighted ? 'none' : '1px solid #E8EDF4',
+                boxShadow: plan.highlighted ? '0 20px 60px rgba(23,60,99,0.35)' : '0 4px 24px rgba(23,60,99,0.07)',
+                position: 'relative',
+                transform: plan.highlighted ? 'scale(1.03)' : 'none',
+              }}
             >
-              {plan.cta}
-              <FaArrowRight className="text-xs" />
-            </Button>
-          </motion.div>
-        ))}
+              {/* Badge */}
+              {plan.badge && (
+                <div style={{
+                  position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)',
+                  background: '#27AE60',
+                  color: '#fff',
+                  padding: '5px 18px',
+                  borderRadius: 50,
+                  fontSize: 12, fontWeight: 700,
+                  letterSpacing: '0.05em',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0 4px 12px rgba(39,174,96,0.35)',
+                }}>
+                  {plan.badge}
+                </div>
+              )}
+
+              {/* Plan name */}
+              <div style={{ marginBottom: 20 }}>
+                <h3 style={{
+                  fontFamily: "'Lora', serif",
+                  fontSize: 20, fontWeight: 700,
+                  color: plan.highlighted ? '#fff' : '#0D1B2A',
+                  margin: '0 0 8px',
+                }}>
+                  {plan.name}
+                </h3>
+                <p style={{ fontSize: 13, color: plan.highlighted ? 'rgba(255,255,255,0.65)' : '#6B7A8D', margin: 0, lineHeight: 1.5 }}>
+                  {plan.description}
+                </p>
+              </div>
+
+              {/* Price */}
+              <div style={{ marginBottom: 28, display: 'flex', alignItems: 'flex-end', gap: 4 }}>
+                <span style={{
+                  fontFamily: "'Lora', serif",
+                  fontSize: 44, fontWeight: 700,
+                  color: plan.highlighted ? '#fff' : '#0D1B2A',
+                  lineHeight: 1,
+                }}>
+                  {billing === 'yearly'
+                    ? `₹${Math.round(parseInt(plan.price.replace(/[₹,]/g, '')) * 0.8).toLocaleString('en-IN')}`
+                    : plan.price}
+                </span>
+                <span style={{ fontSize: 14, color: plan.highlighted ? 'rgba(255,255,255,0.6)' : '#9DAAB8', marginBottom: 6, fontWeight: 500 }}>
+                  {plan.period}
+                </span>
+              </div>
+
+              {/* Divider */}
+              <div style={{ height: 1, background: plan.highlighted ? 'rgba(255,255,255,0.15)' : '#F0F4F8', marginBottom: 24 }} />
+
+              {/* Features */}
+              <ul style={{ listStyle: 'none', margin: '0 0 28px', padding: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {plan.features.map((feat, j) => (
+                  <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, color: plan.highlighted ? 'rgba(255,255,255,0.85)' : '#3D4D5C' }}>
+                    <div style={{
+                      width: 20, height: 20, borderRadius: '50%',
+                      background: plan.highlighted ? 'rgba(255,255,255,0.15)' : 'rgba(23,60,99,0.08)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0, marginTop: 1,
+                    }}>
+                      <FiCheck size={11} style={{ color: plan.highlighted ? '#fff' : '#173C63', strokeWidth: 3 }} />
+                    </div>
+                    {feat}
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA */}
+              <Link
+                to="/appointments"
+                aria-label={`${plan.cta} - ${plan.name} plan`}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  width: '100%',
+                  padding: '13px 0',
+                  borderRadius: 50,
+                  background: plan.highlighted ? '#fff' : '#173C63',
+                  color: plan.highlighted ? '#173C63' : '#fff',
+                  fontSize: 14, fontWeight: 700,
+                  textDecoration: 'none',
+                  transition: 'all 0.25s',
+                  border: 'none',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = plan.highlighted ? '0 8px 24px rgba(255,255,255,0.3)' : '0 8px 24px rgba(23,60,99,0.3)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                {plan.cta} <FiArrowRight size={14} />
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      {/* Footer note */}
-      <p className="text-center text-slate-400 text-sm mt-10">
-        All plans include a{' '}
-        <span className="text-white font-semibold">14-day free trial</span>. No credit card required.
-      </p>
-    </SectionWrapper>
+      <style>{`
+        @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr !important; max-width: 480px; margin: 0 auto; } }
+      `}</style>
+    </section>
   );
 };
 

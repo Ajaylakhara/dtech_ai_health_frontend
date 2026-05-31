@@ -2,16 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../redux/thunks/authThunks';
-import { FaUser, FaEnvelope, FaLock, FaHospital } from 'react-icons/fa';
-import Button from '../../components/ui/Button';
+import { FaUser, FaEnvelope, FaLock, FaHospital, FaCheckCircle } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import logo from '../../assets/MediCare_logo.png';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'patient',
+    name: '', email: '', password: '', confirmPassword: '', role: 'patient',
   });
   const { userInfo, status, error: reduxError } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -28,10 +25,7 @@ const SignupForm = () => {
       return;
     }
     dispatch(register({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      role: formData.role,
+      name: formData.name, email: formData.email, password: formData.password, role: formData.role,
     }));
   };
 
@@ -44,143 +38,174 @@ const SignupForm = () => {
   }, [userInfo, navigate]);
 
   return (
-    <div className="min-h-screen bg-[#0B1120] flex items-center justify-center p-6 selection:bg-blue-500/30 overflow-hidden relative">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[140px] pointer-events-none" />
+    <div style={{ width: '100%', background: '#F4F7FB', minHeight: '100vh', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px', position: 'relative' }}>
+      {/* Background Blobs */}
+      <div style={{ position: 'absolute', top: '10%', left: '10%', width: 400, height: 400, background: 'rgba(74,144,226,0.08)', borderRadius: '50%', filter: 'blur(100px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '10%', right: '10%', width: 400, height: 400, background: 'rgba(39,174,96,0.06)', borderRadius: '50%', filter: 'blur(100px)', pointerEvents: 'none' }} />
 
-      <div className="glass border border-white/10 rounded-[2.5rem] w-full max-w-5xl flex overflow-hidden min-h-[600px] backdrop-blur-3xl shadow-2xl relative z-10">
+      <div style={{
+        background: '#FFFFFF', border: '1px solid #E8EDF4', borderRadius: 32, width: '100%', maxWidth: 1000,
+        display: 'flex', overflow: 'hidden', minHeight: 600, boxShadow: '0 24px 80px rgba(23,60,99,0.08)', position: 'relative', zIndex: 1
+      }}>
         
         {/* Left Side - Form */}
-        <div className="w-full lg:w-1/2 p-10 md:p-14 flex flex-col justify-center">
-          <div className="mb-8">
-            <h2 className="text-3xl font-black text-white mb-2">Join the Future.</h2>
-            <p className="text-slate-400 font-medium">Create your DTech AI account today.</p>
+        <div style={{ width: '50%', padding: '56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#FFFFFF' }}>
+          <div style={{ marginBottom: 24 }}>
+            <h2 style={{ fontSize: 28, fontWeight: 700, color: '#0D1B2A', marginBottom: 8, fontFamily: "'Lora', serif" }}>Create Patient Account</h2>
+            <p style={{ color: '#6B7A8D', fontWeight: 500, fontSize: 15 }}>Join MediCare to start scheduling medical consults.</p>
           </div>
 
           {reduxError && (
-            <div className="mb-6 p-4 bg-red-500/10 border-l-4 border-red-500 text-red-400 rounded-2xl text-sm font-bold animate-shake">
+            <div style={{ marginBottom: 20, padding: 16, background: 'rgba(235,87,87,0.05)', borderLeft: '4px solid #EB5757', color: '#EB5757', borderRadius: 12, fontSize: 13, fontWeight: 700, lineHeight: 1.5 }}>
               {reduxError}
             </div>
           )}
           {userInfo && (
-            <div className="mb-6 p-4 bg-green-500/10 border-l-4 border-green-500 text-green-400 rounded-2xl text-sm font-bold">
-              Welcome aboard! Registration successful. Redirecting...
+            <div style={{ marginBottom: 20, padding: 16, background: 'rgba(39,174,96,0.05)', borderLeft: '4px solid #27AE60', color: '#27AE60', borderRadius: 12, fontSize: 13, fontWeight: 700, lineHeight: 1.5 }}>
+              Welcome aboard! Registration successful. Redirecting to portal...
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-bold text-slate-300 ml-1">Full Name</label>
-              <div className="relative">
-                <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <label style={{ fontSize: 13, fontWeight: 700, color: '#3D4D5C', letterSpacing: '0.02em' }}>Full Name</label>
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#6B7A8D' }}><FaUser size={16} /></div>
                 <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/60 transition-all font-semibold text-white placeholder-slate-500 text-base"
-                  required
+                  type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe"
+                  style={{ width: '100%', padding: '14px 16px 14px 44px', background: '#F8FAFC', border: '1px solid #E8EDF4', borderRadius: 12, fontSize: 15, fontWeight: 600, color: '#0D1B2A', outline: 'none', transition: 'all 0.2s' }}
+                  onFocus={(e) => { e.target.style.borderColor = '#173C63'; e.target.style.boxShadow = '0 0 0 3px rgba(23,60,99,0.1)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = '#E8EDF4'; e.target.style.boxShadow = 'none'; }} required
                 />
               </div>
             </div>
 
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-bold text-slate-300 ml-1">Email Address</label>
-              <div className="relative">
-                <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <label style={{ fontSize: 13, fontWeight: 700, color: '#3D4D5C', letterSpacing: '0.02em' }}>Email Address</label>
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#6B7A8D' }}><FaEnvelope size={16} /></div>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="name@example.com"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/60 transition-all font-semibold text-white placeholder-slate-500 text-base"
-                  required
+                  type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com"
+                  style={{ width: '100%', padding: '14px 16px 14px 44px', background: '#F8FAFC', border: '1px solid #E8EDF4', borderRadius: 12, fontSize: 15, fontWeight: 600, color: '#0D1B2A', outline: 'none', transition: 'all 0.2s' }}
+                  onFocus={(e) => { e.target.style.borderColor = '#173C63'; e.target.style.boxShadow = '0 0 0 3px rgba(23,60,99,0.1)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = '#E8EDF4'; e.target.style.boxShadow = 'none'; }} required
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-300 ml-1">Password</label>
-              <div className="relative">
-                <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/60 transition-all font-semibold text-white placeholder-slate-500 text-base"
-                  required
-                />
+            <div style={{ display: 'flex', gap: 16 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+                <label style={{ fontSize: 13, fontWeight: 700, color: '#3D4D5C', letterSpacing: '0.02em' }}>Password</label>
+                <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#6B7A8D' }}><FaLock size={16} /></div>
+                  <input
+                    type="password" name="password" value={formData.password} onChange={handleChange} placeholder="••••••••"
+                    style={{ width: '100%', padding: '14px 16px 14px 44px', background: '#F8FAFC', border: '1px solid #E8EDF4', borderRadius: 12, fontSize: 15, fontWeight: 600, color: '#0D1B2A', outline: 'none', transition: 'all 0.2s' }}
+                    onFocus={(e) => { e.target.style.borderColor = '#173C63'; e.target.style.boxShadow = '0 0 0 3px rgba(23,60,99,0.1)'; }}
+                    onBlur={(e) => { e.target.style.borderColor = '#E8EDF4'; e.target.style.boxShadow = 'none'; }} required
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+                <label style={{ fontSize: 13, fontWeight: 700, color: '#3D4D5C', letterSpacing: '0.02em' }}>Confirm Password</label>
+                <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#6B7A8D' }}><FaLock size={16} /></div>
+                  <input
+                    type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="••••••••"
+                    style={{ width: '100%', padding: '14px 16px 14px 44px', background: '#F8FAFC', border: '1px solid #E8EDF4', borderRadius: 12, fontSize: 15, fontWeight: 600, color: '#0D1B2A', outline: 'none', transition: 'all 0.2s' }}
+                    onFocus={(e) => { e.target.style.borderColor = '#173C63'; e.target.style.boxShadow = '0 0 0 3px rgba(23,60,99,0.1)'; }}
+                    onBlur={(e) => { e.target.style.borderColor = '#E8EDF4'; e.target.style.boxShadow = 'none'; }} required
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-300 ml-1">Confirm Password</label>
-              <div className="relative">
-                <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/60 transition-all font-semibold text-white placeholder-slate-500 text-base"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="md:col-span-2 pt-4">
-              <Button
-                type="submit"
-                disabled={status === 'loading'}
-                variant="primary"
-                className="w-full py-4 text-base font-black uppercase tracking-wider"
-              >
-                {status === 'loading' ? 'Creating Account...' : 'Get Started'}
-              </Button>
-            </div>
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="signup-btn"
+              style={{
+                width: '100%', background: '#173C63', color: '#FFFFFF', padding: '16px', borderRadius: 12,
+                fontSize: 15, fontWeight: 700, border: 'none', cursor: 'pointer', transition: 'all 0.2s', marginTop: 12
+              }}
+            >
+              {status === 'loading' ? 'Creating Account...' : 'Create Account'}
+            </button>
           </form>
 
-          <div className="mt-8 text-center select-none">
-            <p className="text-slate-400 font-bold text-sm">
-              Already a member?{' '}
-              <Link to="/" className="text-blue-400 hover:text-blue-300 hover:underline transition-all">
+          <div style={{ marginTop: 24, textAlign: 'center' }}>
+            <p style={{ color: '#6B7A8D', fontWeight: 600, fontSize: 14 }}>
+              Already have an account?{' '}
+              <Link to="/login" style={{ color: '#4A90E2', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#173C63'} onMouseOut={(e) => e.target.style.color = '#4A90E2'}>
                 Login here
               </Link>
             </p>
           </div>
         </div>
 
-        {/* Right Side - Hero / Visual */}
-        <div className="hidden lg:flex w-1/2 bg-gradient-to-tr from-[#3B82F6]/10 to-[#8B5CF6]/10 border-l border-white/5 p-12 flex-col justify-between text-white relative">
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#8B5CF6]/5 to-transparent backdrop-blur-xl -z-10" />
-          <div className="flex flex-col gap-8">
-            <Link to="/home" className="flex items-center gap-2 group">
-              <div className="p-2.5 rounded-xl bg-gradient-to-tr from-[#3B82F6] to-[#8B5CF6] text-white shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-all duration-300">
-                <FaHospital size={20} />
-              </div>
-              <span className="text-xl font-black tracking-tight text-white select-none">
-                DTech<span className="text-gradient font-bold"> AI</span>
-              </span>
+        {/* Right Side - Welcoming Side */}
+        <div style={{ width: '50%', background: '#FAFCFF', borderLeft: '1px solid #E8EDF4', padding: 48, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(23,60,99,0.03) 0%, transparent 100%)', pointerEvents: 'none' }} />
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+            {/* Logo */}
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+              <img src={logo} alt="MediCare Logo" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
             </Link>
+
+            {/* Highlights */}
             <div>
-              <h2 className="text-4xl font-black mb-4 leading-tight">
-                Empowering <span className="text-gradient font-black">Healthcare.</span>
+              <h2 style={{ fontSize: 32, fontWeight: 800, color: '#0D1B2A', lineHeight: 1.2, fontFamily: "'Lora', serif", marginBottom: 16 }}>
+                Join a Complete <span style={{ color: '#173C63', fontStyle: 'italic' }}>Preventative Care</span> Network
               </h2>
-              <p className="text-slate-400 font-medium leading-relaxed">
-                Unlock instantaneous data diagnostics and advanced SaaS insights for a complete preventative healthcare system.
+              <p style={{ color: '#6B7A8D', fontWeight: 500, lineHeight: 1.6, fontSize: 15, marginBottom: 32 }}>
+                Get started today and discover the convenience of a modern medical ecosystem tailored fully for patient ease, security, and well-being.
               </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 14, color: '#3D4D5C', fontWeight: 600 }}>
+                  <FaCheckCircle style={{ color: '#27AE60', fontSize: 18 }} />
+                  <span>Integrated Digital Health Record</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 14, color: '#3D4D5C', fontWeight: 600 }}>
+                  <FaCheckCircle style={{ color: '#27AE60', fontSize: 18 }} />
+                  <span>Direct Communication channels</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 14, color: '#3D4D5C', fontWeight: 600 }}>
+                  <FaCheckCircle style={{ color: '#27AE60', fontSize: 18 }} />
+                  <span>Compliant HIPAA Privacy Standard</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="text-xs text-slate-500 font-medium leading-relaxed">
-            All your information is secured by enterprise-grade cloud encryption and industry standards.
+
+          <div style={{ fontSize: 12, color: '#9DAAB8', fontWeight: 600 }}>
+            All details are fully encrypted under standard medical protocol layers.
           </div>
         </div>
+
       </div>
+
+      <style>{`
+        .signup-btn:hover:not(:disabled) {
+          background: #1E4D7B !important;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(23,60,99,0.25);
+        }
+        .signup-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed !important;
+        }
+        @media (max-width: 1024px) {
+          div[style*="width: '50%'"] {
+            width: 100% !important;
+          }
+          div[style*="background: '#FAFCFF'"] {
+            display: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

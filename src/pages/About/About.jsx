@@ -1,186 +1,503 @@
 import React from "react";
-import { FaBullseye, FaEye, FaHandHoldingHeart, FaMicroscope, FaShieldAlt, FaCheck } from "react-icons/fa";
+import {
+  FaBullseye, FaEye, FaHandHoldingHeart,
+  FaMicroscope, FaShieldAlt, FaCheck, FaAward
+} from "react-icons/fa";
 import { motion } from "framer-motion";
+
+const milestones = [
+  {
+    year: "2016",
+    title: "MediCare Founded",
+    description:
+      "Started as a passionate community clinic with 5 doctors, dedicated to elevating neighborhood healthcare standards.",
+    icon: <FaAward size={18} />,
+    color: "#4A90E2",
+    bg: "rgba(74,144,226,0.1)",
+  },
+  {
+    year: "2019",
+    title: "Multi-Specialty Expansion",
+    description:
+      "Inaugurated our state-of-the-art 150-bed campus featuring modular operating theatres and a dedicated trauma center.",
+    icon: <FaHandHoldingHeart size={18} />,
+    color: "#27AE60",
+    bg: "rgba(39,174,96,0.1)",
+  },
+  {
+    year: "2023",
+    title: "NABH Accreditation",
+    description:
+      "Awarded national accreditation for clinical excellence and patient safety, placing us among the top tier institutions.",
+    icon: <FaShieldAlt size={18} />,
+    color: "#173C63",
+    bg: "rgba(23,60,99,0.1)",
+  },
+  {
+    year: "2026",
+    title: "Digital Health Transition",
+    description:
+      "Launched advanced patient portals, integrated EHR system, and telehealth services to connect doctors and patients globally.",
+    icon: <FaMicroscope size={18} />,
+    color: "#E67E22",
+    bg: "rgba(230,126,34,0.1)",
+  },
+];
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.6, delay },
+});
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-[#0B1120] text-slate-100 flex flex-col pt-24 font-sans antialiased overflow-hidden selection:bg-blue-500/30">
-      {/* Hero Section */}
-      <section className="relative py-24 bg-[#0B1120] text-white overflow-hidden border-b border-white/5">
-        <div 
-          className="absolute inset-0 opacity-15"
-          style={{ 
-            backgroundImage: 'url("https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
+    <div
+      style={{
+        width: "100%",
+        background: "#FFFFFF",
+        minHeight: "100vh",
+        fontFamily: "'Inter', sans-serif",
+        overflowX: "hidden",
+      }}
+    >
+      {/* ─── Hero ─── */}
+      <section
+        style={{
+          position: "relative",
+          padding: "130px 24px 90px",
+          background:
+            "radial-gradient(circle at 50% 40%, rgba(74,144,226,0.09) 0%, rgba(255,255,255,0) 65%)",
+          borderBottom: "1px solid #E8EDF4",
+          overflow: "hidden",
+          textAlign: "center",
+        }}
+      >
+        {/* decorative blobs */}
+        <div
+          style={{
+            position: "absolute",
+            top: "30%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            width: 520,
+            height: 520,
+            borderRadius: "50%",
+            background: "rgba(74,144,226,0.05)",
+            filter: "blur(80px)",
+            pointerEvents: "none",
           }}
         />
-        {/* Glow blobs */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/8 rounded-full blur-[100px] pointer-events-none select-none" />
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[90px] pointer-events-none select-none" />
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 uppercase tracking-tight"
-            style={{ fontFamily: 'var(--font-title)' }}
+        <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <motion.div
+            {...fadeUp(0)}
+            style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}
           >
-            About <span className="text-gradient">DTech AI</span> Pro
+            <span className="badge-pill">Who We Are</span>
+          </motion.div>
+
+          <motion.h1
+            {...fadeUp(0.1)}
+            style={{
+              fontFamily: "'Lora', serif",
+              fontSize: "clamp(2.6rem, 5vw, 4rem)",
+              fontWeight: 700,
+              color: "#173C63",
+              lineHeight: 1.15,
+              letterSpacing: "-0.02em",
+              marginBottom: 24,
+            }}
+          >
+            About{" "}
+            <span style={{ fontStyle: "italic", color: "#4A90E2" }}>
+              MediCare
+            </span>
           </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-medium"
+
+          <motion.p
+            {...fadeUp(0.2)}
+            style={{
+              fontSize: 18,
+              color: "#3D4D5C",
+              lineHeight: 1.7,
+              fontWeight: 500,
+              maxWidth: 660,
+              margin: "0 auto",
+            }}
           >
-            We are a multi-specialty institution committed to providing high-quality healthcare 
-            through advanced technology and a patient-first approach.
+            We are a multi-specialty institution committed to providing world-class
+            healthcare by blending clinical brilliance, compassionate care, and
+            state-of-the-art medical technology.
           </motion.p>
         </div>
       </section>
 
-      {/* Mission & Vision */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
+      {/* ─── Mission & Vision ─── */}
+      <section style={{ background: "#F8F9FC", padding: "96px 24px" }}>
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: 32,
+          }}
+        >
+          {/* Mission */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="rounded-3xl p-8 bg-[#141D2F] border border-white/5 hover:border-blue-500/30 transition-all duration-300"
+            {...fadeUp(0.1)}
+            className="card-vitalix"
+            style={{ padding: 40, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}
           >
-            <h2 className="text-3xl font-extrabold text-white" style={{ fontFamily: 'var(--font-title)' }}>Our Mission</h2>
-            <div className="mt-8 flex gap-6 items-start">
-              <div className="bg-blue-500/10 p-4 rounded-2xl text-blue-400 border border-blue-500/20 flex-shrink-0">
-                <FaBullseye size={32} />
-              </div>
-              <p className="text-slate-400 text-lg leading-relaxed">
-                To offer top-quality healthcare services with a team of highly skilled professionals, 
-                ensuring patient safety, satisfaction, and long-term well-being through clinical excellence.
-              </p>
+            <div
+              className="icon-circle"
+              style={{
+                background: "rgba(74,144,226,0.1)",
+                color: "#4A90E2",
+                width: 64,
+                height: 64,
+                marginBottom: 24,
+              }}
+            >
+              <FaBullseye size={26} />
             </div>
+            <h2
+              className="font-serif"
+              style={{ fontSize: 26, fontWeight: 700, color: "#173C63", marginBottom: 16 }}
+            >
+              Our Mission
+            </h2>
+            <p style={{ color: "#3D4D5C", fontSize: 16, lineHeight: 1.7, fontWeight: 500 }}>
+              To offer high-quality, comprehensive clinical care with deep empathy,
+              transparency, and affordability. We strive daily to elevate clinical
+              standards, prioritize patient safety, and champion proactive wellness
+              within our global community.
+            </p>
           </motion.div>
 
+          {/* Vision */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="rounded-3xl p-8 bg-[#141D2F] border border-white/5 hover:border-purple-500/30 transition-all duration-300"
+            {...fadeUp(0.2)}
+            className="card-vitalix"
+            style={{ padding: 40, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}
           >
-            <h2 className="text-3xl font-extrabold text-white" style={{ fontFamily: 'var(--font-title)' }}>Our Vision</h2>
-            <div className="mt-8 flex gap-6 items-start">
-              <div className="bg-purple-500/10 p-4 rounded-2xl text-purple-400 border border-purple-500/20 flex-shrink-0">
-                <FaEye size={32} />
-              </div>
-              <p className="text-slate-400 text-lg leading-relaxed">
-                To be a leading global healthcare institution known for medical innovation, 
-                compassionate care, and setting new benchmarks in medical precision.
-              </p>
+            <div
+              className="icon-circle"
+              style={{
+                background: "rgba(39,174,96,0.1)",
+                color: "#27AE60",
+                width: 64,
+                height: 64,
+                marginBottom: 24,
+              }}
+            >
+              <FaEye size={26} />
             </div>
+            <h2
+              className="font-serif"
+              style={{ fontSize: 26, fontWeight: 700, color: "#173C63", marginBottom: 16 }}
+            >
+              Our Vision
+            </h2>
+            <p style={{ color: "#3D4D5C", fontSize: 16, lineHeight: 1.7, fontWeight: 500 }}>
+              To be a globally recognized symbol of medical innovation, ethical
+              practice, and patient satisfaction. We envision setting new standards
+              in clinical accuracy through advanced digital integrations and custom
+              treatment paradigms.
+            </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Core Values */}
-      <section className="py-24 bg-[#0B1120] relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-extrabold text-white mb-12" style={{ fontFamily: 'var(--font-title)' }}>Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1, duration: 0.55 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="bg-[#141D2F] p-8 rounded-2xl border border-white/5 hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.12)] transition-all duration-300 group cursor-default"
+      {/* ─── Core Values ─── */}
+      <section style={{ background: "#FFFFFF", padding: "96px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          {/* heading */}
+          <div style={{ textAlign: "center", marginBottom: 64 }}>
+            <span className="section-tag">Values</span>
+            <h2
+              className="section-title"
+              style={{ color: "#173C63" }}
             >
-              <div className="w-16 h-16 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:bg-gradient-to-tr group-hover:from-blue-500 group-hover:to-purple-600 group-hover:text-white transition-all duration-300">
-                <FaHandHoldingHeart size={30} />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Compassion</h3>
-              <p className="text-slate-400 leading-relaxed">
-                We prioritize patient care with empathy, respect, and dignity in every interaction.
-              </p>
-            </motion.div>
+              Our Core Pillars
+            </h2>
+          </div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.55 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="bg-[#141D2F] p-8 rounded-2xl border border-white/5 hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(139,92,246,0.12)] transition-all duration-300 group cursor-default"
-            >
-              <div className="w-16 h-16 bg-purple-500/10 border border-purple-500/20 rounded-2xl flex items-center justify-center text-purple-400 mb-6 group-hover:bg-gradient-to-tr group-hover:from-blue-500 group-hover:to-purple-600 group-hover:text-white transition-all duration-300">
-                <FaMicroscope size={30} />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Innovation</h3>
-              <p className="text-slate-400 leading-relaxed">
-                We embrace medical advancements to enhance treatments and patient outcomes constantly.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.55 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="bg-[#141D2F] p-8 rounded-2xl border border-white/5 hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.12)] transition-all duration-300 group cursor-default"
-            >
-              <div className="w-16 h-16 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:bg-gradient-to-tr group-hover:from-blue-500 group-hover:to-purple-600 group-hover:text-white transition-all duration-300">
-                <FaShieldAlt size={30} />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Integrity</h3>
-              <p className="text-slate-400 leading-relaxed">
-                We uphold transparency, trust, and ethical medical practices as our foundational pillars.
-              </p>
-            </motion.div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: 28,
+            }}
+          >
+            {[
+              {
+                icon: <FaHandHoldingHeart size={28} />,
+                color: "#173C63",
+                bg: "rgba(23,60,99,0.07)",
+                title: "Compassion",
+                desc:
+                  "We prioritize patient care with deep empathy, dignity, and active listening. Behind every chart is a human story.",
+              },
+              {
+                icon: <FaMicroscope size={28} />,
+                color: "#4A90E2",
+                bg: "rgba(74,144,226,0.1)",
+                title: "Innovation",
+                desc:
+                  "We embrace modular technology, AI diagnostic support, and continuous clinical trials to build safer healthcare futures.",
+              },
+              {
+                icon: <FaShieldAlt size={28} />,
+                color: "#27AE60",
+                bg: "rgba(39,174,96,0.1)",
+                title: "Integrity",
+                desc:
+                  "We practice transparent pricing, evidence-based medication, and ethical transparency in all administrative processes.",
+              },
+            ].map((val, i) => (
+              <motion.div
+                key={i}
+                {...fadeUp(0.1 * (i + 1))}
+                className="card-vitalix"
+                style={{
+                  padding: 36,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  className="icon-circle"
+                  style={{
+                    background: val.bg,
+                    color: val.color,
+                    width: 68,
+                    height: 68,
+                    marginBottom: 24,
+                  }}
+                >
+                  {val.icon}
+                </div>
+                <h3
+                  className="font-serif"
+                  style={{ fontSize: 22, fontWeight: 700, color: "#173C63", marginBottom: 12 }}
+                >
+                  {val.title}
+                </h3>
+                <p style={{ color: "#3D4D5C", fontSize: 15, lineHeight: 1.65, fontWeight: 500 }}>
+                  {val.desc}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-24 bg-[#0B1120]">
-        <div className="max-w-7xl mx-auto px-6 overflow-hidden">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-[#141D2F] rounded-3xl p-12 md:p-20 border border-white/5 flex flex-col lg:flex-row gap-16 items-center"
+      {/* ─── Milestones Timeline ─── */}
+      <section
+        style={{
+          background: "#F8F9FC",
+          padding: "96px 24px",
+          borderTop: "1px solid #E8EDF4",
+          borderBottom: "1px solid #E8EDF4",
+        }}
+      >
+        <div style={{ maxWidth: 720, margin: "0 auto" }}>
+          {/* heading */}
+          <div style={{ textAlign: "center", marginBottom: 64 }}>
+            <span className="section-tag">History</span>
+            <h2 className="section-title" style={{ color: "#173C63" }}>
+              Our Journey &amp; Milestones
+            </h2>
+          </div>
+
+          {/* Vertical timeline — single centred column */}
+          <div style={{ position: "relative", paddingLeft: 32 }}>
+            {/* vertical line */}
+            <div
+              style={{
+                position: "absolute",
+                left: 20,
+                top: 0,
+                bottom: 0,
+                width: 2,
+                background:
+                  "linear-gradient(to bottom, #E2E8F0 0%, #173C63 50%, #E2E8F0 100%)",
+              }}
+            />
+
+            {milestones.map((m, i) => (
+              <motion.div
+                key={i}
+                {...fadeUp(0.1 * i)}
+                style={{
+                  position: "relative",
+                  paddingLeft: 48,
+                  paddingBottom: i < milestones.length - 1 ? 48 : 0,
+                }}
+              >
+                {/* dot */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 4,
+                    width: 40,
+                    height: 40,
+                    borderRadius: "50%",
+                    background: "#FFFFFF",
+                    border: "3px solid #173C63",
+                    boxShadow: "0 4px 14px rgba(23,60,99,0.18)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#173C63",
+                    zIndex: 2,
+                  }}
+                >
+                  {m.icon}
+                </div>
+
+                {/* card */}
+                <div
+                  className="card-vitalix"
+                  style={{ padding: "24px 28px" }}
+                >
+                  <span
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: m.color,
+                      background: m.bg,
+                      padding: "3px 12px",
+                      borderRadius: 50,
+                      display: "inline-block",
+                      marginBottom: 10,
+                    }}
+                  >
+                    {m.year}
+                  </span>
+                  <h4
+                    className="font-serif"
+                    style={{ fontSize: 20, fontWeight: 700, color: "#173C63", marginBottom: 8 }}
+                  >
+                    {m.title}
+                  </h4>
+                  <p style={{ color: "#3D4D5C", fontSize: 15, lineHeight: 1.65 }}>
+                    {m.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Why Choose Us ─── */}
+      <section style={{ background: "#FFFFFF", padding: "96px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <motion.div
+            {...fadeUp(0)}
+            style={{
+              background: "#F4F7FB",
+              borderRadius: 28,
+              border: "1px solid #E8EDF4",
+              padding: "60px 48px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 48,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            <div className="lg:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-8" style={{ fontFamily: 'var(--font-title)' }}>
-                Why Choose Us?
+            {/* text side */}
+            <div style={{ flex: "1 1 340px", maxWidth: 480 }}>
+              <span
+                className="section-tag"
+                style={{ background: "#FFFFFF", border: "1px solid #E8EDF4" }}
+              >
+                Excellence
+              </span>
+              <h2
+                className="font-serif"
+                style={{
+                  fontSize: "clamp(1.8rem, 3vw, 2.4rem)",
+                  fontWeight: 700,
+                  color: "#173C63",
+                  lineHeight: 1.25,
+                  marginBottom: 28,
+                }}
+              >
+                Why Patients Trust MediCare
               </h2>
-              <div className="space-y-4">
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {[
-                  "Highly experienced doctors and medical staff",
-                  "State-of-the-art facilities with cutting-edge tech",
-                  "24/7 emergency and critical care services",
-                  "Patient-centered approach with personalized treatments",
-                  "Affordable and accessible healthcare for all"
+                  "Board-certified, highly-skilled medical specialists",
+                  "Advanced smart infrastructure & EHR technologies",
+                  "24/7 comprehensive emergency & critical care units",
+                  "Customized treatment paradigms & active wellness focus",
+                  "Ethical, transparent billing & insurance partnerships",
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <div className="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xs">
-                      <FaCheck />
+                  <div
+                    key={i}
+                    style={{ display: "flex", alignItems: "center", gap: 14 }}
+                  >
+                    <div
+                      style={{
+                        width: 26,
+                        height: 26,
+                        borderRadius: "50%",
+                        background: "rgba(39,174,96,0.1)",
+                        border: "1px solid rgba(39,174,96,0.2)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#27AE60",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <FaCheck size={11} />
                     </div>
-                    <span className="text-slate-300 font-medium">{item}</span>
+                    <span style={{ color: "#3D4D5C", fontWeight: 600, fontSize: 15 }}>
+                      {item}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="lg:w-1/2 w-full h-80 bg-slate-800/40 rounded-2xl border border-white/5 overflow-hidden shadow-inner relative">
-               <img 
-                src="https://images.unsplash.com/photo-1581056771107-2475d56397a5?q=80&w=2070&auto=format&fit=crop" 
-                alt="Hospital Facility" 
-                className="w-full h-full object-cover"
-               />
-               <div className="absolute inset-0 bg-blue-500/10 mix-blend-multiply" />
+
+            {/* image side */}
+            <div
+              style={{
+                flex: "1 1 300px",
+                maxWidth: 440,
+                height: 340,
+                borderRadius: 18,
+                overflow: "hidden",
+                border: "1px solid #E8EDF4",
+                boxShadow: "0 4px 24px rgba(23,60,99,0.08)",
+                position: "relative",
+              }}
+              className="group"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1581056771107-2475d56397a5?q=80&w=2070&auto=format&fit=crop"
+                alt="Hospital Facility"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(to top, rgba(23,60,99,0.25) 0%, transparent 60%)",
+                }}
+              />
             </div>
           </motion.div>
         </div>

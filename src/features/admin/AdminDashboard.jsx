@@ -10,13 +10,7 @@ import PatientsForm from '../../components/forms/PatientsForm/PatientsForm';
 
 import Sidebar from './Sidebar';
 import Header from './Header';
-import DoctorsTable from './DoctorsTable';
-import PatientVisitsChart from './PatientVisitsChart';
-import ReportsList from './ReportsList';
-import CalendarWidget from './CalendarWidget';
-import RightSidebar from './RightSidebar';
 import TabbedModal from '../../components/ui/TabbedModal';
-import { FaPlus } from 'react-icons/fa';
 
 import { useLocation, Outlet } from 'react-router-dom';
 
@@ -30,7 +24,6 @@ const AdminDashboard = () => {
   const [editingDepartment, setEditingDepartment] = useState(null);
   const [editingDoctor, setEditingDoctor] = useState(null);
 
-  // Derive current "context" from path for the Quick Action modal
   const path = location.pathname;
   const currentContext = 
     path.includes('/doctors') ? 'doctors' : 
@@ -67,109 +60,75 @@ const AdminDashboard = () => {
 
   if (!userInfo || userInfo.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-[#18191A] flex items-center justify-center">
-        <h2 className="text-2xl font-bold text-red-500">Access Denied: Admins Only</h2>
+      <div style={{ minHeight: '100vh', background: '#F4F7FB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <h2 style={{ fontSize: 24, fontWeight: 700, color: '#EB5757' }}>Access Denied: Admins Only</h2>
       </div>
     );
   }
 
   const allQuickActionTabs = [
-    {
-      id: 'add-doctor',
-      label: 'Add Doctor',
-      component: <DoctorsForm onSubmit={handleActionSuccess} />,
-      tabMatch: 'doctors'
-    },
-    {
-      id: 'add-patient',
-      label: 'Add Patient',
-      component: <PatientsForm onSuccess={handleActionSuccess} />,
-      tabMatch: 'patients'
-    },
-    {
-      id: 'book-appointment',
-      label: 'Book Appointment',
-      component: <AppointmentForm onSuccess={handleActionSuccess} />,
-      tabMatch: 'all' 
-    },
-    {
-      id: 'add-department',
-      label: 'Add Department',
-      component: <DepartmentForm onSuccess={handleActionSuccess} />,
-      tabMatch: 'departments'
-    },
+    { id: 'add-doctor', label: 'Add Doctor', component: <DoctorsForm onSubmit={handleActionSuccess} />, tabMatch: 'doctors' },
+    { id: 'add-patient', label: 'Add Patient', component: <PatientsForm onSuccess={handleActionSuccess} />, tabMatch: 'patients' },
+    { id: 'book-appointment', label: 'Book Appointment', component: <AppointmentForm onSuccess={handleActionSuccess} />, tabMatch: 'all' },
+    { id: 'add-department', label: 'Add Department', component: <DepartmentForm onSuccess={handleActionSuccess} />, tabMatch: 'departments' },
   ];
 
   const quickActionTabs = allQuickActionTabs.filter(tab => {
     if (['doctors', 'patients', 'departments'].includes(currentContext)) {
       return tab.tabMatch === currentContext;
     }
-    return tab.tabMatch === 'all' || tab.tabMatch === 'doctors' || tab.tabMatch === 'departments'; // Show more options in overview
+    return tab.tabMatch === 'all' || tab.tabMatch === 'doctors' || tab.tabMatch === 'departments';
   });
 
   return (
-    <div className="flex min-h-screen bg-[#151618] font-sans selection:bg-[#D3F843] selection:text-black">
+    <div
+      style={{
+        display: 'flex',
+        minHeight: '100vh',
+        background: '#F4F7FB',
+        fontFamily: "'Inter', sans-serif",
+        outline: 'none',
+        border: 'none',
+        overflow: 'hidden',
+      }}
+    >
       {/* Fixed Sidebar */}
       <Sidebar />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        <Header 
-          adminName={userInfo?.name} 
-          onAddDoctorClick={() => setIsQuickActionOpen(true)} 
-        />
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+        <Header adminName={userInfo?.name} onAddDoctorClick={() => setIsQuickActionOpen(true)} />
         
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto px-1 lg:px-4 pb-8 custom-scrollbar">
-           <Outlet context={{ setIsQuickActionOpen, handleEditDepartment, handleEditDoctor }} />
+        <div style={{
+          flex: 1, overflowY: 'auto',
+          padding: '24px 24px 48px',
+          background: '#F4F7FB',
+        }}
+          className="admin-scrollbar"
+        >
+          <Outlet context={{ setIsQuickActionOpen, handleEditDepartment, handleEditDoctor }} />
         </div>
       </main>
 
       {/* Quick Action Modal */}
-      <TabbedModal 
-        isOpen={isQuickActionOpen} 
-        onClose={() => setIsQuickActionOpen(false)} 
-        tabs={quickActionTabs}
-      />
+      <TabbedModal isOpen={isQuickActionOpen} onClose={() => setIsQuickActionOpen(false)} tabs={quickActionTabs} />
 
       {/* Edit Item Modal */}
-      <TabbedModal 
-        isOpen={isEditModalOpen} 
-        onClose={() => {
-           setIsEditModalOpen(false);
-           setEditingDepartment(null);
-           setEditingDoctor(null);
-        }} 
+      <TabbedModal
+        isOpen={isEditModalOpen}
+        onClose={() => { setIsEditModalOpen(false); setEditingDepartment(null); setEditingDoctor(null); }}
         tabs={[
-          editingDepartment && {
-            id: 'edit-department',
-            label: 'Edit Department',
-            component: <DepartmentForm initialData={editingDepartment} onSuccess={handleActionSuccess} />,
-          },
-          editingDoctor && {
-            id: 'edit-doctor',
-            label: 'Edit Doctor',
-            component: <DoctorsForm initialData={editingDoctor} onSubmit={handleActionSuccess} />,
-          }
+          editingDepartment && { id: 'edit-department', label: 'Edit Department', component: <DepartmentForm initialData={editingDepartment} onSuccess={handleActionSuccess} /> },
+          editingDoctor && { id: 'edit-doctor', label: 'Edit Doctor', component: <DoctorsForm initialData={editingDoctor} onSubmit={handleActionSuccess} /> }
         ].filter(Boolean)}
       />
 
-      {/* Quick global CSS tweaks for scrollbars */}
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2A2B2D; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #333538; }
-
-        /* Force Forms into dark mode styling */
-        .dark-form-wrapper input, .dark-form-wrapper select, .dark-form-wrapper textarea {
-           background-color: #18191A !important;
-           border-color: #333538 !important;
-           color: white !important;
-        }
-        .dark-form-wrapper label {
-           color: #8f95a0 !important;
-        }
+        .admin-scrollbar::-webkit-scrollbar { width: 6px; }
+        .admin-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .admin-scrollbar::-webkit-scrollbar-thumb { background: rgba(23,60,99,0.15); border-radius: 10px; }
+        .admin-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(23,60,99,0.25); }
       `}</style>
     </div>
   );

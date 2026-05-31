@@ -18,72 +18,172 @@ const DepartmentsTable = ({ departments, onEdit }) => {
   };
 
   return (
-    <div className="bg-[#1E1F21] rounded-[2rem] border border-slate-800 overflow-hidden shadow-2xl">
-      <div className="p-8 border-b border-slate-800 flex justify-between items-center">
-        <h3 className="text-xl font-bold text-white flex items-center gap-3">
-          <FaHospital className="text-blue-400" /> Departments List
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #E8EDF4',
+      borderRadius: 16,
+      overflow: 'hidden',
+      boxShadow: '0 4px 16px rgba(23,60,99,0.04)',
+    }}>
+      {/* Table Header Bar */}
+      <div style={{
+        padding: '20px 28px',
+        borderBottom: '1px solid #E8EDF4',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      }}>
+        <h3 style={{
+          fontSize: 15, fontWeight: 700, color: '#0D1B2A', margin: 0,
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: 'rgba(74,144,226,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#4A90E2',
+          }}>
+            <FaHospital size={14} />
+          </div>
+          Departments List
         </h3>
-        <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
-          {departments?.length || 0} Total
+        <span style={{
+          background: 'rgba(74,144,226,0.1)', color: '#4A90E2',
+          border: '1px solid rgba(74,144,226,0.2)',
+          padding: '4px 14px', borderRadius: 50,
+          fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
+        }}>
+          {departments?.length ?? 0} Total
         </span>
       </div>
-      
-      <div className="overflow-x-auto">
-        <table className="w-full text-left">
+
+      {/* Table */}
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
           <thead>
-            <tr className="bg-[#18191A] text-slate-400 text-xs font-black uppercase tracking-[0.2em] border-b border-slate-800">
-              <th className="px-8 py-5">Image</th>
-              <th className="px-8 py-5">Name</th>
-              <th className="px-8 py-5">Description</th>
-              <th className="px-8 py-5">Fee (₹)</th>
-              <th className="px-8 py-5 text-right">Actions</th>
+            <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E8EDF4' }}>
+              {['Image', 'Name', 'Description', 'Fee (₹)', 'Actions'].map((h, i) => (
+                <th key={i} style={{
+                  padding: '14px 20px',
+                  fontSize: 11, fontWeight: 700, color: '#6B7A8D',
+                  textTransform: 'uppercase', letterSpacing: '0.12em',
+                  textAlign: h === 'Actions' ? 'right' : 'left',
+                }}>{h}</th>
+              ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800">
-            {departments?.map((dept) => (
-              <tr key={dept._id} className="group hover:bg-blue-500/5 transition-colors">
-                <td className="px-8 py-6">
-                  {dept.image ? (
-                    <img src={dept.image} alt={dept.name} className="w-12 h-12 rounded-xl object-cover ring-2 ring-slate-800" />
-                  ) : (
-                    <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-slate-500">
-                      <FaHospital />
+          <tbody>
+            {departments?.length > 0 ? (
+              departments.map((dept, idx) => (
+                <tr
+                  key={dept._id}
+                  style={{ borderBottom: '1px solid #E8EDF4', transition: 'background 0.15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#F4F7FB'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  {/* Image */}
+                  <td style={{ padding: '14px 20px' }}>
+                    {dept.image ? (
+                      <img
+                        src={dept.image}
+                        alt={dept.name}
+                        style={{
+                          width: 40, height: 40, borderRadius: 10,
+                          objectFit: 'cover',
+                          border: '2px solid #E8EDF4',
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: 40, height: 40, borderRadius: 10,
+                        background: `hsl(${(idx * 53) % 360}, 55%, 92%)`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: `hsl(${(idx * 53) % 360}, 50%, 40%)`,
+                        fontSize: 16, fontWeight: 700,
+                        border: '2px solid #E8EDF4',
+                        flexShrink: 0,
+                      }}>
+                        {dept.name?.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </td>
+
+                  {/* Name */}
+                  <td style={{ padding: '14px 20px' }}>
+                    <span style={{ fontWeight: 700, color: '#0D1B2A', fontSize: 13 }}>
+                      {dept.name}
+                    </span>
+                  </td>
+
+                  {/* Description */}
+                  <td style={{ padding: '14px 20px', color: '#6B7A8D', fontSize: 13, maxWidth: 280 }}>
+                    <span style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}>
+                      {dept.description || '—'}
+                    </span>
+                  </td>
+
+                  {/* Fee */}
+                  <td style={{ padding: '14px 20px' }}>
+                    <span style={{
+                      background: 'rgba(74,144,226,0.08)', color: '#4A90E2',
+                      border: '1px solid rgba(74,144,226,0.18)',
+                      padding: '4px 10px', borderRadius: 8,
+                      fontSize: 11, fontWeight: 700,
+                    }}>
+                      ₹{dept.consultationFee || 0}
+                    </span>
+                  </td>
+
+                  {/* Actions */}
+                  <td style={{ padding: '14px 20px', textAlign: 'right' }}>
+                    <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                      <button
+                        onClick={() => onEdit(dept)}
+                        title="Edit"
+                        style={{
+                          width: 32, height: 32, borderRadius: 8,
+                          background: '#F8FAFC', border: '1px solid #E8EDF4',
+                          color: '#6B7A8D', cursor: 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 0.2s',
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.color = '#4A90E2'; e.currentTarget.style.borderColor = '#4A90E2'; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = '#6B7A8D'; e.currentTarget.style.borderColor = '#E8EDF4'; }}
+                      >
+                        <FaEdit size={12} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(dept._id)}
+                        title="Delete"
+                        style={{
+                          width: 32, height: 32, borderRadius: 8,
+                          background: 'rgba(235,87,87,0.1)', border: '1px solid rgba(235,87,87,0.15)',
+                          color: '#EB5757', cursor: 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 0.2s',
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.background = '#EB5757'; e.currentTarget.style.color = '#fff'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(235,87,87,0.1)'; e.currentTarget.style.color = '#EB5757'; }}
+                      >
+                        <FaTrash size={12} />
+                      </button>
                     </div>
-                  )}
-                </td>
-                <td className="px-8 py-6">
-                  <div className="font-bold text-white group-hover:text-blue-400 transition-colors">
-                    {dept.name}
-                  </div>
-                </td>
-                <td className="px-8 py-6">
-                  <div className="text-slate-400 text-sm max-w-md truncate">
-                    {dept.description}
-                  </div>
-                </td>
-                <td className="px-8 py-6">
-                  <div className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-lg text-xs font-bold inline-block">
-                    ₹{dept.consultationFee || 0}
-                  </div>
-                </td>
-                <td className="px-8 py-6 text-right">
-                  <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button 
-                      onClick={() => onEdit(dept)}
-                      className="p-2 bg-slate-800 text-slate-400 hover:text-white rounded-xl transition-all"
-                    >
-                      <FaEdit size={16} />
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(dept._id)}
-                      className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all"
-                    >
-                      <FaTrash size={16} />
-                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" style={{ padding: '48px 20px', textAlign: 'center' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, color: '#9DAAB8' }}>
+                    <FaHospital size={36} style={{ opacity: 0.2 }} />
+                    <p style={{ fontWeight: 700, margin: 0 }}>No departments found.</p>
                   </div>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -92,4 +192,3 @@ const DepartmentsTable = ({ departments, onEdit }) => {
 };
 
 export default DepartmentsTable;
-

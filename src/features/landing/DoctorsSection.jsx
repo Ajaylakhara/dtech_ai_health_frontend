@@ -1,185 +1,191 @@
-import { useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { FaStar, FaArrowLeft, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
-import Badge from '../../components/ui/Badge';
-import SectionWrapper, { SectionHeading } from '../../components/ui/SectionWrapper';
+import { motion } from 'framer-motion';
+import { FiStar, FiCalendar, FiArrowRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const doctors = [
   {
-    id: 1,
-    name: 'Dr. Rahul Malhotra',
-    role: 'Senior Cardiologist',
-    patients: '2.5k+',
-    rating: '4.9',
-    experience: '15 yrs',
-    imgUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=800&auto=format&fit=crop',
+    name: 'Dr. Sarah Mitchell',
+    specialty: 'Senior Cardiologist',
+    experience: '18 Years',
+    rating: 4.9,
+    reviews: 312,
+    initials: 'SM',
+    color: '#E53E3E',
+    bg: 'linear-gradient(135deg, #FC8181, #E53E3E)',
     available: true,
   },
   {
-    id: 2,
-    name: 'Dr. Michael Chen',
-    role: 'Chief Neurologist',
-    patients: '1.8k+',
-    rating: '4.8',
-    experience: '12 yrs',
-    imgUrl: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=800&auto=format&fit=crop',
+    name: 'Dr. Arjun Mehta',
+    specialty: 'Neurology Specialist',
+    experience: '14 Years',
+    rating: 4.8,
+    reviews: 247,
+    initials: 'AM',
+    color: '#173C63',
+    bg: 'linear-gradient(135deg, #4A90E2, #173C63)',
     available: true,
   },
   {
-    id: 3,
-    name: 'Dr. Priya Mehta',
-    role: 'Pediatric Specialist',
-    patients: '3.2k+',
-    rating: '4.9',
-    experience: '10 yrs',
-    imgUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=800&auto=format&fit=crop',
+    name: 'Dr. Priya Sharma',
+    specialty: 'Paediatric Expert',
+    experience: '11 Years',
+    rating: 4.9,
+    reviews: 198,
+    initials: 'PS',
+    color: '#27AE60',
+    bg: 'linear-gradient(135deg, #68D391, #27AE60)',
     available: false,
+  },
+  {
+    name: 'Dr. James Wilson',
+    specialty: 'Orthopaedic Surgeon',
+    experience: '22 Years',
+    rating: 5.0,
+    reviews: 421,
+    initials: 'JW',
+    color: '#6B46C1',
+    bg: 'linear-gradient(135deg, #B794F4, #6B46C1)',
+    available: true,
   },
 ];
 
-// ── Parallax tilt wrapper ─────────────────────────────────────────────────────
-const TiltCard = ({ children, className = '' }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-60, 60], [8, -8]);
-  const rotateY = useTransform(x, [-60, 60], [-8, 8]);
-
-  const handleMouse = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    x.set(e.clientX - rect.left - rect.width / 2);
-    y.set(e.clientY - rect.top - rect.height / 2);
-  };
-  const reset = () => { x.set(0); y.set(0); };
-
-  return (
-    <motion.div
-      onMouseMove={handleMouse}
-      onMouseLeave={reset}
-      style={{ rotateX, rotateY, transformPerspective: 900 }}
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2 }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
 const DoctorsSection = () => {
-  const [idx, setIdx] = useState(0);
-  const prev = () => setIdx((i) => (i - 1 + doctors.length) % doctors.length);
-  const next = () => setIdx((i) => (i + 1) % doctors.length);
-
   return (
-    <SectionWrapper id="doctors">
-      {/* Header row */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
-        <SectionHeading label="Medical Experts" title="Meet Our Specialists" />
-        <div className="flex gap-3 mb-4 md:mb-0">
-          {[{ fn: prev, Icon: FaArrowLeft }, { fn: next, Icon: FaArrowRight }].map(({ fn, Icon }, i) => (
-            <button
+    <section style={{ background: '#F4F7FB', padding: '96px 24px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 24 }}>
+          <div>
+            <span className="section-tag">Our Doctors</span>
+            <h2 className="section-title" style={{ marginTop: 12 }}>
+              Meet Our{' '}
+              <span style={{ fontStyle: 'italic', color: '#173C63' }}>Expert Team</span>
+            </h2>
+          </div>
+          <Link
+            to="/departments"
+            className="btn-outline"
+            style={{ flexShrink: 0 }}
+            aria-label="View all doctors and medical departments"
+          >
+            View All Doctors <FiArrowRight />
+          </Link>
+        </div>
+
+        {/* Doctor Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }} className="doctors-grid">
+          {doctors.map((doctor, i) => (
+            <motion.div
               key={i}
-              onClick={fn}
-              aria-label={i === 0 ? 'Previous doctor' : 'Next doctor'}
-              className="w-14 h-14 rounded-xl glass border border-white/10 text-white
-                hover:border-blue-500/50 hover:text-blue-400 hover:shadow-[0_0_16px_rgba(59,130,246,0.25)]
-                transition-all duration-200 flex items-center justify-center"
+              className="card-vitalix"
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              style={{ padding: 0, overflow: 'hidden', cursor: 'pointer' }}
             >
-              <Icon className="text-base" />
-            </button>
+              {/* Doctor Photo Area */}
+              <div style={{
+                height: 220,
+                background: doctor.bg,
+                display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                {/* Decorative pattern */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                  backgroundImage: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 60%)',
+                }} />
+                {/* Avatar */}
+                <div style={{
+                  width: 100, height: 100, borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.2)',
+                  border: '4px solid rgba(255,255,255,0.4)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 32, fontWeight: 700, color: '#fff',
+                  fontFamily: "'Lora', serif",
+                  marginBottom: 20,
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                  backdropFilter: 'blur(10px)',
+                  zIndex: 1,
+                }}>
+                  {doctor.initials}
+                </div>
+                {/* Availability badge */}
+                <div style={{
+                  position: 'absolute', top: 16, right: 16,
+                  padding: '5px 12px', borderRadius: 50,
+                  background: doctor.available ? 'rgba(39,174,96,0.9)' : 'rgba(156,163,175,0.9)',
+                  color: '#fff', fontSize: 11, fontWeight: 600,
+                  backdropFilter: 'blur(4px)',
+                }}>
+                  {doctor.available ? '● Available' : '● Busy'}
+                </div>
+              </div>
+
+              {/* Doctor Info */}
+              <div style={{ padding: '20px 24px 24px' }}>
+                {/* Name */}
+                <h3 style={{
+                  fontFamily: "'Lora', serif",
+                  fontSize: 17, fontWeight: 700,
+                  color: '#0D1B2A',
+                  margin: '0 0 4px',
+                  lineHeight: 1.2,
+                }}>
+                  {doctor.name}
+                </h3>
+                {/* Specialty */}
+                <p style={{ fontSize: 13, color: '#6B7A8D', margin: '0 0 12px', fontWeight: 500 }}>
+                  {doctor.specialty} · {doctor.experience}
+                </p>
+
+                {/* Rating */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16 }}>
+                  <div style={{ display: 'flex', gap: 2 }}>
+                    {[1,2,3,4,5].map(s => (
+                      <FiStar key={s} size={12}
+                        style={{ color: '#F59E0B', fill: s <= Math.floor(doctor.rating) ? '#F59E0B' : 'transparent' }}
+                      />
+                    ))}
+                  </div>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0D1B2A' }}>{doctor.rating}</span>
+                  <span style={{ fontSize: 12, color: '#9DAAB8' }}>({doctor.reviews} reviews)</span>
+                </div>
+
+                {/* Book Now Button */}
+                <Link
+                  to="/appointments"
+                  aria-label={`Book appointment with ${doctor.name}`}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+                    width: '100%',
+                    padding: '10px 0',
+                    borderRadius: 50,
+                    background: '#173C63',
+                    color: '#fff',
+                    fontSize: 13, fontWeight: 600,
+                    textDecoration: 'none',
+                    transition: 'all 0.2s',
+                    border: 'none',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#1E4D7B'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#173C63'; e.currentTarget.style.transform = 'none'; }}
+                >
+                  <FiCalendar size={13} /> Book Now
+                </Link>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
-        {doctors.map((doc, i) => (
-          <TiltCard key={doc.id} className="h-full">
-            <motion.div
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.55 }}
-              className="bg-[#141D2F] rounded-2xl overflow-hidden border border-white/8
-                hover:border-blue-500/30 hover:shadow-[0_0_28px_rgba(59,130,246,0.14)]
-                transition-all duration-300 h-full flex flex-col"
-            >
-              {/* Image */}
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src={doc.imgUrl}
-                  alt={doc.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#141D2F] via-[#141D2F]/20 to-transparent" />
-
-                {/* Badges */}
-                <div className="absolute top-3 right-3">
-                  <Badge variant={doc.available ? 'success' : 'danger'} ping={doc.available}>
-                    {doc.available ? 'Available' : 'Busy'}
-                  </Badge>
-                </div>
-                <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 glass rounded-full border border-white/10">
-                  <FaCheckCircle className="text-blue-400 text-xs" />
-                  <span className="text-white text-[11px] font-bold">Verified</span>
-                </div>
-              </div>
-
-              {/* Info */}
-              <div className="p-5 flex-1 flex flex-col">
-                <h3 className="text-white font-black text-[17px] mb-0.5" style={{ fontFamily: 'var(--font-title)' }}>
-                  {doc.name}
-                </h3>
-                <p className="text-blue-400 text-sm font-semibold mb-5">{doc.role}</p>
-
-                {/* Stats row */}
-                <div className="grid grid-cols-3 gap-2 mb-5">
-                  {[['Patients', doc.patients], ['Rating', doc.rating], ['Exp', doc.experience]].map(([k, v]) => (
-                    <div key={k} className="bg-white/5 rounded-xl p-3 text-center border border-white/5">
-                      <p className="text-white font-bold text-sm">{v}</p>
-                      <p className="text-slate-400 text-[10px] mt-0.5">{k}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Stars */}
-                <div className="flex gap-1 mb-5">
-                  {[...Array(5)].map((_, j) => (
-                    <FaStar
-                      key={j}
-                      className={`text-xs ${j < Math.floor(parseFloat(doc.rating)) ? 'text-amber-400' : 'text-white/10'}`}
-                    />
-                  ))}
-                  <span className="text-slate-400 text-xs ml-1">{doc.rating}</span>
-                </div>
-
-                <button
-                  className="mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all duration-200
-                    bg-gradient-to-r from-blue-500 to-purple-600 text-white
-                    hover:shadow-[0_0_20px_rgba(59,130,246,0.45)] hover:scale-[1.02] active:scale-95"
-                >
-                  Book Appointment
-                </button>
-              </div>
-            </motion.div>
-          </TiltCard>
-        ))}
-      </div>
-
-      {/* Carousel dots */}
-      <div className="flex justify-center gap-2 mt-10">
-        {doctors.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIdx(i)}
-            aria-label={`Go to doctor ${i + 1}`}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              i === idx ? 'w-8 bg-blue-500' : 'w-2 bg-white/25'
-            }`}
-          />
-        ))}
-      </div>
-    </SectionWrapper>
+      <style>{`
+        @media (max-width: 1024px) { .doctors-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 560px)  { .doctors-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
+    </section>
   );
 };
 

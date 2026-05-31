@@ -1,156 +1,202 @@
-import { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { FaStar, FaQuoteLeft } from 'react-icons/fa';
-import Button from '../../components/ui/Button';
-import SectionWrapper, { SectionHeading } from '../../components/ui/SectionWrapper';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiStar, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-const reviews = [
+const testimonials = [
   {
-    id: 1,
-    name: 'Alice Cooper',
-    role: 'Cardiac Patient',
+    name: 'Rajesh Kapoor',
+    role: 'Heart Surgery Patient',
     rating: 5,
-    imgUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
-    text: 'Dr. Jenkins and her team were absolutely wonderful. Safe, prepared, and compassionate throughout.',
+    review: "The cardiac team at MediCare saved my life. From the moment I arrived, every doctor and nurse treated me with incredible care and professionalism. I couldn't be more grateful.",
+    initials: 'RK',
+    color: 'linear-gradient(135deg, #FC8181, #E53E3E)',
   },
   {
-    id: 2,
-    name: 'James Anderson',
-    role: 'Surgery Patient',
+    name: 'Meena Subramaniam',
+    role: 'Maternity Care Patient',
     rating: 5,
-    imgUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
-    text: 'State-of-the-art facility, completely professional staff. My questions were always answered within minutes.',
+    review: "My entire maternity journey was handled with such warmth and expertise. The doctors were always available to answer my questions. A truly five-star experience throughout.",
+    initials: 'MS',
+    color: 'linear-gradient(135deg, #68D391, #27AE60)',
   },
   {
-    id: 3,
-    name: 'Samantha Reed',
-    role: 'Annual Checkup',
-    rating: 4,
-    imgUrl: 'https://randomuser.me/api/portraits/women/68.jpg',
-    text: "Best hospital experience I've ever had. Everyone operates with a deep sense of care and empathy.",
+    name: 'David Thompson',
+    role: 'Orthopaedic Patient',
+    rating: 5,
+    review: "After my knee surgery, the recovery programme designed by the team was outstanding. I was back to running within three months. The physiotherapy support was exceptional.",
+    initials: 'DT',
+    color: 'linear-gradient(135deg, #4A90E2, #173C63)',
   },
   {
-    id: 4,
-    name: 'Michael T.',
+    name: 'Anita Patel',
+    role: 'Diabetes Management',
+    rating: 5,
+    review: "Managing my Type 2 diabetes has become so much easier with MediCare's integrated care plan. The nutritionist and endocrinologist work together seamlessly — it's remarkable.",
+    initials: 'AP',
+    color: 'linear-gradient(135deg, #B794F4, #6B46C1)',
+  },
+  {
+    name: 'Suresh Nair',
     role: 'Neurology Patient',
     rating: 5,
-    imgUrl: 'https://randomuser.me/api/portraits/men/85.jpg',
-    text: "They don't just treat symptoms — they focus on overall wellness and a complete recovery plan.",
+    review: "Dr. Mehta diagnosed my condition quickly when other hospitals had missed it for months. The neurology department here is truly world-class. Forever thankful.",
+    initials: 'SN',
+    color: 'linear-gradient(135deg, #F6AD55, #D97706)',
   },
 ];
 
 const TestimonialsSection = () => {
-  const [current, setCurrent] = useState(0);
-  const next = useCallback(() => setCurrent((c) => (c + 1) % reviews.length), []);
+  const [active, setActive] = useState(0);
 
-  useEffect(() => {
-    const t = setInterval(next, 4500);
-    return () => clearInterval(t);
-  }, [next]);
+  const prev = () => setActive(a => (a - 1 + testimonials.length) % testimonials.length);
+  const next = () => setActive(a => (a + 1) % testimonials.length);
+
+  const visible = [
+    testimonials[(active) % testimonials.length],
+    testimonials[(active + 1) % testimonials.length],
+    testimonials[(active + 2) % testimonials.length],
+  ];
 
   return (
-    <SectionWrapper id="testimonials" className="overflow-hidden">
-      <SectionHeading
-        label="Patient Stories"
-        title="Trusted by Thousands"
-        subtitle="Real feedback from patients who experienced the difference."
-      />
-
-      {/* Cards */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-        {reviews.map((r, i) => {
-          const isActive = i === current;
-          return (
-            <motion.div
-              key={r.id}
-              animate={{
-                opacity: isActive ? 1 : 0.45,
-                scale: isActive ? 1 : 0.96,
-                y: isActive ? 0 : 12,
-              }}
-              transition={{ duration: 0.4 }}
-              onClick={() => setCurrent(i)}
-              className={`rounded-2xl p-6 border cursor-pointer transition-all duration-300 flex flex-col gap-4
-                ${isActive
-                  ? 'bg-[#141D2F] border-blue-500/40 shadow-[0_0_28px_rgba(59,130,246,0.18)]'
-                  : 'glass border-white/8 hover:border-white/20'
-                }`}
+    <section style={{ background: '#F4F7FB', padding: '96px 24px', overflow: 'hidden' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 24 }}>
+          <div>
+            <span className="section-tag">Testimonials</span>
+            <h2 className="section-title" style={{ marginTop: 12 }}>
+              What Our{' '}
+              <span style={{ fontStyle: 'italic', color: '#173C63' }}>Patients Say</span>
+            </h2>
+          </div>
+          {/* Navigation arrows */}
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button onClick={prev} aria-label="Previous testimonial" style={{
+              width: 48, height: 48, borderRadius: '50%',
+              border: '2px solid #E2E8F0',
+              background: '#fff',
+              color: '#173C63', fontSize: 18,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'all 0.2s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#173C63'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#173C63'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#173C63'; e.currentTarget.style.borderColor = '#E2E8F0'; }}
             >
-              <FaQuoteLeft className="text-blue-500/50 text-xl" />
+              <FiChevronLeft />
+            </button>
+            <button onClick={next} aria-label="Next testimonial" style={{
+              width: 48, height: 48, borderRadius: '50%',
+              border: 'none',
+              background: '#173C63',
+              color: '#fff', fontSize: 18,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'all 0.2s',
+              boxShadow: '0 4px 14px rgba(23,60,99,0.3)',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#1E4D7B'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#173C63'; e.currentTarget.style.transform = 'none'; }}
+            >
+              <FiChevronRight />
+            </button>
+          </div>
+        </div>
 
-              <div className="flex gap-1">
-                {[...Array(5)].map((_, j) => (
-                  <FaStar key={j} className={`text-xs ${j < r.rating ? 'text-amber-400' : 'text-white/10'}`} />
+        {/* Testimonial Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }} className="testimonials-grid">
+          {visible.map((t, i) => (
+            <motion.div
+              key={`${active}-${i}`}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08, duration: 0.4 }}
+              style={{
+                background: '#fff',
+                border: '1px solid #E8EDF4',
+                borderRadius: 20,
+                padding: '28px',
+                boxShadow: '0 4px 24px rgba(23,60,99,0.07)',
+                display: 'flex', flexDirection: 'column', gap: 16,
+                position: 'relative',
+              }}
+            >
+              {/* Quote mark */}
+              <div style={{
+                fontFamily: "'Lora', serif",
+                fontSize: 64, lineHeight: 0.8,
+                color: 'rgba(23,60,99,0.1)',
+                fontWeight: 700,
+                position: 'absolute',
+                top: 20, right: 24,
+              }}>
+                "
+              </div>
+
+              {/* Stars */}
+              <div style={{ display: 'flex', gap: 3 }}>
+                {[1,2,3,4,5].map(s => (
+                  <FiStar key={s} size={14} style={{ color: '#F59E0B', fill: '#F59E0B' }} />
                 ))}
               </div>
 
-              <p className="text-slate-400 text-sm leading-relaxed flex-1">"{r.text}"</p>
+              {/* Review text */}
+              <p style={{
+                fontSize: 14, lineHeight: 1.75,
+                color: '#3D4D5C',
+                margin: 0, flexGrow: 1,
+                fontStyle: 'italic',
+              }}>
+                "{t.review}"
+              </p>
 
-              <div className="flex items-center gap-3 pt-2 border-t border-white/8">
-                <img
-                  src={r.imgUrl}
-                  alt={r.name}
-                  loading="lazy"
-                  className="w-10 h-10 rounded-full object-cover border border-white/15"
-                />
+              {/* Author */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, borderTop: '1px solid #F0F4F8', paddingTop: 16 }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: '50%',
+                  background: t.color,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', fontSize: 13, fontWeight: 700,
+                  flexShrink: 0,
+                }}>
+                  {t.initials}
+                </div>
                 <div>
-                  <p className="text-white font-bold text-sm">{r.name}</p>
-                  <p className="text-slate-400 text-xs">{r.role}</p>
+                  <div style={{ fontFamily: "'Lora', serif", fontSize: 15, fontWeight: 700, color: '#0D1B2A' }}>{t.name}</div>
+                  <div style={{ fontSize: 12, color: '#9DAAB8', fontWeight: 500 }}>{t.role}</div>
                 </div>
               </div>
             </motion.div>
-          );
-        })}
-      </div>
-
-      {/* Dots */}
-      <div className="flex justify-center gap-2 mb-16">
-        {reviews.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            aria-label={`Testimonial ${i + 1}`}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              i === current ? 'w-8 bg-blue-500' : 'w-2 bg-white/20'
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Mid-page CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 32 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="rounded-3xl p-10 md:p-14 border border-white/10 text-center relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, rgba(59,130,246,0.07) 0%, rgba(139,92,246,0.07) 100%)',
-        }}
-      >
-        {/* Glow blobs */}
-        <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 right-1/3 -translate-y-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10">
-          <p className="text-slate-400 text-xs uppercase tracking-[0.2em] font-bold mb-4">Start Today</p>
-          <h3
-            className="text-white text-3xl md:text-4xl font-black mb-6 leading-tight"
-            style={{ fontFamily: 'var(--font-title)' }}
-          >
-            Join 1.2M+ patients already using{' '}
-            <span className="text-gradient">DTech AI</span>
-          </h3>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Button variant="primary" className="px-8 py-3">
-              Get Started Free
-            </Button>
-            <Button variant="glass" className="px-8 py-3">
-              Book a Demo
-            </Button>
-          </div>
+          ))}
         </div>
-      </motion.div>
-    </SectionWrapper>
+
+        {/* Dots */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 40 }}>
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              aria-label={`Go to testimonial ${i + 1}`}
+              style={{
+                width: i === active ? 24 : 8,
+                height: 8,
+                borderRadius: 4,
+                background: i === active ? '#173C63' : '#CBD5E0',
+                border: '12px solid transparent',
+                backgroundClip: 'padding-box',
+                cursor: 'pointer',
+                transition: 'all 0.3s',
+                padding: 0,
+                boxSizing: 'content-box',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        @media (max-width: 900px) { .testimonials-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 560px) { .testimonials-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
+    </section>
   );
 };
 

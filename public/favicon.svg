@@ -1,31 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <!-- Background Gradient -->
+    <!-- Background Gradient: Corporate Blue to Modern Sky Blue -->
     <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3B82F6" />
-      <stop offset="100%" stop-color="#8B5CF6" />
+      <stop offset="0%" stop-color="#173C63" />
+      <stop offset="100%" stop-color="#3B82F6" />
     </linearGradient>
 
     <!-- Activity Glow Filter -->
     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feGaussianBlur stdDeviation="2" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
 
-  <!-- Rounded base/plate -->
+  <!-- Rounded base plate -->
   <rect x="12" y="12" width="104" height="104" rx="28" fill="url(#bgGradient)" />
 
-  <!-- Subtle Inner Border/Shadow -->
-  <rect x="14" y="14" width="100" height="100" rx="26" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="2" />
+  <!-- Subtle Inner Border -->
+  <rect x="14" y="14" width="100" height="100" rx="26" fill="none" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="2" />
 
-  <!-- Activity Pulse/Wave Line -->
-  <!-- FiActivity zigzag: moving point to point -->
-  <path d="M 34 64 L 46 64 L 54 42 L 64 86 L 74 54 L 82 64 L 94 64" 
-        fill="none" 
-        stroke="#FFFFFF" 
-        stroke-width="7.5" 
-        stroke-linecap="round" 
-        stroke-linejoin="round" 
-        filter="url(#glow)" />
+  <!-- Premium Stethoscope Heart Icon -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <!-- Outer left heart contour that loops and crosses over itself at the bottom -->
+    <path d="M 64,46 C 51,32 38,40 38,56 C 38,72 54,86 60,92 C 63,95 68,103 66,107 C 64,111 60,110 59,104 C 58,98 65,92 74,88" />
+    
+    <!-- Outer right heart contour that ends in the chestpiece -->
+    <path d="M 64,46 C 77,32 90,40 90,56 C 90,68 83,76 77,81" />
+    
+    <!-- Chestpiece (diaphragm) circle -->
+    <circle cx="75" cy="83" r="6" stroke="#FFFFFF" stroke-width="3" fill="none" />
+    <circle cx="75" cy="83" r="1.5" fill="#FFFFFF" />
+
+    <!-- Inner headset U-tube -->
+    <path d="M 52,65 C 52,76 76,76 76,65" />
+    
+    <!-- Inner headset ear tubes -->
+    <path d="M 52,65 C 52,57 60,51 61,51" />
+    <path d="M 76,65 C 76,57 68,51 67,51" />
+  </g>
+
+  <!-- Earpieces -->
+  <circle cx="61" cy="51" r="2.5" fill="#FFFFFF" />
+  <circle cx="67" cy="51" r="2.5" fill="#FFFFFF" />
 </svg>

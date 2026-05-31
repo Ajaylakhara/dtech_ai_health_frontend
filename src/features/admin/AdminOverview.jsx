@@ -1,48 +1,133 @@
 import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
-import DoctorsTable from './DoctorsTable';
-import DepartmentsTable from './DepartmentsTable';
-import AdminPatients from './AdminPatients';
 import PatientVisitsChart from './PatientVisitsChart';
 import ReportsList from './ReportsList';
 import CalendarWidget from './CalendarWidget';
 import RightSidebar from './RightSidebar';
-import { FaPlus } from 'react-icons/fa';
+import { FiPlus, FiUsers, FiUserCheck, FiCalendar, FiActivity } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+
+const statCards = (doctors, appointments, departments) => [
+  { label: 'Total Doctors', value: doctors?.length ?? 0, icon: <FiUserCheck size={20} />, color: '#4A90E2', bg: 'rgba(74,144,226,0.1)', trend: '+3 this month' },
+  { label: 'Patients Today', value: appointments?.filter(a => {
+    const d = new Date(a.date || a.createdAt);
+    return d.toDateString() === new Date().toDateString();
+  }).length ?? 0, icon: <FiUsers size={20} />, color: '#27AE60', bg: 'rgba(39,174,96,0.1)', trend: '+12% vs yesterday' },
+  { label: 'Appointments', value: appointments?.length ?? 0, icon: <FiCalendar size={20} />, color: '#F59E0B', bg: 'rgba(245,158,11,0.1)', trend: 'Total booked' },
+  { label: 'Departments', value: departments?.length ?? 0, icon: <FiActivity size={20} />, color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)', trend: 'Active units' },
+];
 
 const AdminOverview = () => {
-  const { doctors } = useSelector((state) => state.doctors);
-  const { departments } = useSelector((state) => state.departments);
-  const {setIsQuickActionOpen } = useOutletContext();
-  const onQuickAddClick = () => setIsQuickActionOpen(true);
+  const { doctors } = useSelector(state => state.doctors);
+  const { appointments } = useSelector(state => state.appointments);
+  const { departments } = useSelector(state => state.departments);
+  const { setIsQuickActionOpen } = useOutletContext();
+
+  const cards = statCards(doctors, appointments, departments);
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 mt-2 relative">
-      <div className="flex-1 flex flex-col gap-6 max-w-full min-w-0">
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="text-white text-2xl font-bold">Dashboard Overview</h1>
-            <button 
-              onClick={onQuickAddClick}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-blue-500/25 flex items-center gap-2 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-200"
-            >
-              <FaPlus className="text-xs" /> Quick Add
-            </button>
-          </div>
-          
-          {/* Chart Block */}
-          <PatientVisitsChart />
-         
-         {/* Bottom Block (Reports + Calendar) */}
-         <div className="flex flex-col lg:flex-row gap-6">
-           <ReportsList />
-           <CalendarWidget />
-         </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+
+      {/* Page header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <h1 style={{
+            fontFamily: "'Lora', serif",
+            fontSize: 24, fontWeight: 700,
+            color: '#0D1B2A', margin: '0 0 4px',
+          }}>
+            Dashboard <span style={{ color: '#173C63' }}>Overview</span>
+          </h1>
+          <p style={{ fontSize: 13, color: '#6B7A8D', margin: 0, fontWeight: 500 }}>
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
+        <button
+          onClick={() => setIsQuickActionOpen(true)}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 7,
+            padding: '10px 20px',
+            background: '#173C63',
+            color: '#fff', border: 'none', borderRadius: 50,
+            fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(23,60,99,0.15)',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(23,60,99,0.25)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(23,60,99,0.15)'; }}
+        >
+          <FiPlus size={16} /> Quick Add
+        </button>
       </div>
 
-      {/* Right Section */}
-      <RightSidebar />
+      {/* Stat Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}
+        className="admin-stat-grid">
+        {cards.map((card, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.08, duration: 0.4 }}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #E8EDF4',
+              borderRadius: 16,
+              padding: '20px',
+              boxShadow: '0 4px 16px rgba(23,60,99,0.04)',
+              display: 'flex', flexDirection: 'column', gap: 12,
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: 12,
+                background: card.bg,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: card.color,
+              }}>
+                {card.icon}
+              </div>
+              <span style={{
+                fontSize: 10, fontWeight: 700,
+                color: card.color,
+                background: card.bg,
+                padding: '3px 8px', borderRadius: 50,
+                letterSpacing: '0.04em',
+              }}>
+                ↑ Live
+              </span>
+            </div>
+            <div>
+              <div style={{ fontFamily: "'Lora', serif", fontSize: 28, fontWeight: 700, color: '#0D1B2A', lineHeight: 1, marginBottom: 4 }}>
+                {card.value}
+              </div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#3D4D5C', marginBottom: 2 }}>{card.label}</div>
+              <div style={{ fontSize: 11, color: '#6B7A8D' }}>{card.trend}</div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Main + Sidebar layout */}
+      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+        {/* Left column */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 20, minWidth: 0 }}>
+          <PatientVisitsChart />
+          <div style={{ display: 'flex', gap: 20 }}>
+            <ReportsList />
+            <CalendarWidget />
+          </div>
+        </div>
+        {/* Right sidebar */}
+        <RightSidebar />
+      </div>
+
+      <style>{`
+        @media (max-width: 1100px) { .admin-stat-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 600px)  { .admin-stat-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   );
 };
 
 export default AdminOverview;
-

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FaTrash, FaEdit, FaSearch } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaSearch, FaUserInjured } from 'react-icons/fa';
+import { FiUsers, FiActivity, FiHeart, FiDroplet } from 'react-icons/fi';
 import { fetchUsers, deleteUserAction } from '../../redux/thunks/userThunks';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 
 const AdminPatients = () => {
   const dispatch = useDispatch();
@@ -11,7 +13,6 @@ const AdminPatients = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // Fetch users every time we navigate to this page so the list is always fresh
     dispatch(fetchUsers());
   }, [dispatch]);
 
@@ -30,85 +31,303 @@ const AdminPatients = () => {
     alert('Edit functionality opened in modal here');
   };
 
-  if (status === 'loading') return <div className="text-blue-400 p-8 font-bold">Loading Patients...</div>;
+  const allPatients = users.filter(u => u.role === 'patient');
 
-  // Derive subset of patients from raw admin Redux array
-  const formattedPatients = users
-    .filter(u => u.role === 'patient')
+  const formattedPatients = allPatients
     .map(p => ({
-        id: p._id,
-        name: p.name || 'Unnamed User',
-        email: p.email,
-        age: p.age || 'N/A',
-        phone: p.phone || 'N/A',
-        bloodType: p.bloodGroup || 'N/A'
+      id: p._id,
+      name: p.name || 'Unnamed User',
+      email: p.email,
+      age: p.age || 'N/A',
+      phone: p.phone || 'N/A',
+      bloodType: p.bloodGroup || 'N/A'
     }))
-    .filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.email.toLowerCase().includes(searchQuery.toLowerCase()));
+    .filter(p =>
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+  const statCards = [
+    {
+      label: 'Total Patients',
+      value: allPatients.length,
+      icon: <FiUsers size={20} />,
+      color: '#4A90E2',
+      bg: 'rgba(74,144,226,0.1)',
+      trend: 'Registered users',
+    },
+    {
+      label: 'Patients Today',
+      value: 0,
+      icon: <FiActivity size={20} />,
+      color: '#27AE60',
+      bg: 'rgba(39,174,96,0.1)',
+      trend: '+12% vs yesterday',
+    },
+    {
+      label: 'Critical Cases',
+      value: 0,
+      icon: <FiHeart size={20} />,
+      color: '#EB5757',
+      bg: 'rgba(235,87,87,0.1)',
+      trend: 'Needs attention',
+    },
+    {
+      label: 'Blood Types',
+      value: new Set(allPatients.map(p => p.bloodGroup).filter(Boolean)).size || '—',
+      icon: <FiDroplet size={20} />,
+      color: '#8B5CF6',
+      bg: 'rgba(139,92,246,0.1)',
+      trend: 'Unique groups',
+    },
+  ];
 
   return (
-    <div className="flex flex-col gap-6 mt-2">
-      <div className="bg-[#1E1F21] rounded-[2rem] p-8 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
-        <div className="flex justify-between items-center mb-8">
-           <h1 className="text-white text-2xl font-bold">Patient Management</h1>
-           
-           <div className="relative">
-              <input 
-                type="text" 
-                placeholder="Search patients..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[#18191A] border border-slate-700/50 rounded-full py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-blue-500 w-64 transition-colors"
-              />
-              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-           </div>
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-slate-700/50">
-                <th className="pb-4 pt-2 px-4 text-slate-400 font-bold text-sm">Name</th>
-                <th className="pb-4 pt-2 px-4 text-slate-400 font-bold text-sm">Email</th>
-                <th className="pb-4 pt-2 px-4 text-slate-400 font-bold text-sm">Age</th>
-                <th className="pb-4 pt-2 px-4 text-slate-400 font-bold text-sm">Phone</th>
-                <th className="pb-4 pt-2 px-4 text-slate-400 font-bold text-sm">Blood</th>
-                <th className="pb-4 pt-2 px-4 text-slate-400 font-bold text-sm text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {formattedPatients.map(patient => (
-                <tr key={patient.id} className="border-b border-slate-700/30 hover:bg-[#252628] transition-colors group">
-                  <td className="py-4 px-4">
-                     <span className="text-white font-bold">{patient.name}</span>
-                  </td>
-                  <td className="py-4 px-4 text-slate-400">{patient.email}</td>
-                  <td className="py-4 px-4 text-slate-400 font-medium">{patient.age}</td>
-                  <td className="py-4 px-4 text-slate-400">{patient.phone}</td>
-                  <td className="py-4 px-4">
-                     <span className="bg-blue-500/10 px-3 py-1 rounded-full text-blue-400 font-bold text-xs border border-blue-500/20">{patient.bloodType}</span>
-                  </td>
-                  <td className="py-4 px-4 flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                     <button onClick={() => handleEdit(patient.id)} className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-colors">
-                       <FaEdit className="text-sm" />
-                     </button>
-                     <button onClick={() => handleDelete(patient.id)} className="w-8 h-8 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors">
-                       <FaTrash className="text-sm" />
-                     </button>
-                  </td>
-                </tr>
-              ))}
-              {formattedPatients.length === 0 && (
-                 <tr>
-                    <td colSpan="6" className="py-8 text-center text-slate-500">No patients found.</td>
-                 </tr>
-              )}
-            </tbody>
-          </table>
+      {/* Page Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <h1 style={{
+            fontFamily: "'Lora', serif",
+            fontSize: 24, fontWeight: 700,
+            color: '#0D1B2A', margin: '0 0 4px',
+          }}>
+            Patient <span style={{ color: '#173C63' }}>Management</span>
+          </h1>
+          <p style={{ fontSize: 13, color: '#6B7A8D', margin: 0, fontWeight: 500 }}>
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
+        {/* Search Bar */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <FaSearch style={{ position: 'absolute', left: 14, color: '#9DAAB8', fontSize: 12, pointerEvents: 'none' }} />
+          <input
+            type="text"
+            placeholder="Search patients..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              paddingLeft: 38, paddingRight: 16, paddingTop: 10, paddingBottom: 10,
+              width: 240,
+              background: '#FFFFFF',
+              border: '1px solid #E8EDF4',
+              borderRadius: 50,
+              color: '#0D1B2A',
+              fontSize: 13, fontWeight: 500,
+              outline: 'none',
+              boxShadow: '0 4px 14px rgba(23,60,99,0.06)',
+              transition: 'border-color 0.2s',
+            }}
+            onFocus={e => e.target.style.borderColor = 'rgba(74,144,226,0.5)'}
+            onBlur={e => e.target.style.borderColor = '#E8EDF4'}
+          />
         </div>
       </div>
+
+      {/* Stat Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}
+        className="admin-stat-grid">
+        {statCards.map((card, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.08, duration: 0.4 }}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #E8EDF4',
+              borderRadius: 16,
+              padding: '20px',
+              boxShadow: '0 4px 16px rgba(23,60,99,0.04)',
+              display: 'flex', flexDirection: 'column', gap: 12,
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: 12,
+                background: card.bg,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: card.color,
+              }}>
+                {card.icon}
+              </div>
+              <span style={{
+                fontSize: 10, fontWeight: 700,
+                color: card.color,
+                background: card.bg,
+                padding: '3px 8px', borderRadius: 50,
+                letterSpacing: '0.04em',
+              }}>
+                ↑ Live
+              </span>
+            </div>
+            <div>
+              <div style={{ fontFamily: "'Lora', serif", fontSize: 28, fontWeight: 700, color: '#0D1B2A', lineHeight: 1, marginBottom: 4 }}>
+                {card.value}
+              </div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#3D4D5C', marginBottom: 2 }}>{card.label}</div>
+              <div style={{ fontSize: 11, color: '#6B7A8D' }}>{card.trend}</div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Patients Table */}
+      {status === 'loading' ? (
+        <div style={{
+          background: '#FFFFFF', border: '1px solid #E8EDF4', borderRadius: 16,
+          padding: 48, textAlign: 'center',
+          boxShadow: '0 4px 16px rgba(23,60,99,0.04)',
+        }}>
+          <div style={{ fontSize: 14, color: '#4A90E2', fontWeight: 700 }}>Loading Patients...</div>
+        </div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.4 }}
+          style={{
+            background: '#FFFFFF',
+            border: '1px solid #E8EDF4',
+            borderRadius: 16,
+            overflow: 'hidden',
+            boxShadow: '0 4px 16px rgba(23,60,99,0.04)',
+          }}
+        >
+          {/* Table Header Bar */}
+          <div style={{
+            padding: '20px 28px',
+            borderBottom: '1px solid #E8EDF4',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          }}>
+            <h3 style={{ fontSize: 15, fontWeight: 700, color: '#0D1B2A', margin: 0, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(74,144,226,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A90E2' }}>
+                <FaUserInjured size={14} />
+              </div>
+              Patient Records
+            </h3>
+            <span style={{
+              background: 'rgba(74,144,226,0.1)', color: '#4A90E2',
+              border: '1px solid rgba(74,144,226,0.2)',
+              padding: '4px 14px', borderRadius: 50,
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
+            }}>
+              {formattedPatients.length} Shown
+            </span>
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E8EDF4' }}>
+                  {['Name', 'Email', 'Age', 'Phone', 'Blood Type', 'Actions'].map((h, i) => (
+                    <th key={i} style={{
+                      padding: '14px 20px',
+                      fontSize: 11, fontWeight: 700, color: '#6B7A8D',
+                      textTransform: 'uppercase', letterSpacing: '0.12em',
+                      textAlign: h === 'Actions' ? 'right' : 'left',
+                    }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {formattedPatients.map((patient, idx) => (
+                  <tr key={patient.id} style={{
+                    borderBottom: '1px solid #E8EDF4',
+                    transition: 'background 0.15s',
+                  }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#F4F7FB'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    className="patient-row"
+                  >
+                    <td style={{ padding: '14px 20px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div style={{
+                          width: 34, height: 34, borderRadius: 10,
+                          background: `hsl(${(idx * 47) % 360}, 60%, 92%)`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: 13, fontWeight: 700,
+                          color: `hsl(${(idx * 47) % 360}, 50%, 40%)`,
+                          flexShrink: 0,
+                        }}>
+                          {patient.name.charAt(0).toUpperCase()}
+                        </div>
+                        <span style={{ fontWeight: 700, color: '#0D1B2A', fontSize: 13 }}>{patient.name}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '14px 20px', color: '#6B7A8D', fontSize: 13 }}>{patient.email}</td>
+                    <td style={{ padding: '14px 20px', color: '#6B7A8D', fontWeight: 600, fontSize: 13 }}>{patient.age}</td>
+                    <td style={{ padding: '14px 20px', color: '#6B7A8D', fontSize: 13 }}>{patient.phone}</td>
+                    <td style={{ padding: '14px 20px' }}>
+                      <span style={{
+                        background: 'rgba(74,144,226,0.1)',
+                        color: '#4A90E2',
+                        border: '1px solid rgba(74,144,226,0.2)',
+                        padding: '3px 10px', borderRadius: 50,
+                        fontSize: 11, fontWeight: 700,
+                      }}>
+                        {patient.bloodType}
+                      </span>
+                    </td>
+                    <td style={{ padding: '14px 20px', textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                        <button
+                          onClick={() => handleEdit(patient.id)}
+                          style={{
+                            width: 32, height: 32, borderRadius: 8,
+                            background: '#F8FAFC', border: '1px solid #E8EDF4',
+                            color: '#6B7A8D', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            transition: 'all 0.2s',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.color = '#4A90E2'; e.currentTarget.style.borderColor = '#4A90E2'; }}
+                          onMouseLeave={e => { e.currentTarget.style.color = '#6B7A8D'; e.currentTarget.style.borderColor = '#E8EDF4'; }}
+                          title="Edit"
+                        >
+                          <FaEdit size={12} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(patient.id)}
+                          style={{
+                            width: 32, height: 32, borderRadius: 8,
+                            background: 'rgba(235,87,87,0.1)', border: '1px solid rgba(235,87,87,0.15)',
+                            color: '#EB5757', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            transition: 'all 0.2s',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = '#EB5757'; e.currentTarget.style.color = '#fff'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(235,87,87,0.1)'; e.currentTarget.style.color = '#EB5757'; }}
+                          title="Delete"
+                        >
+                          <FaTrash size={12} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {formattedPatients.length === 0 && (
+                  <tr>
+                    <td colSpan="6" style={{ padding: '48px 20px', textAlign: 'center' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, color: '#9DAAB8' }}>
+                        <FaUserInjured size={36} style={{ opacity: 0.2 }} />
+                        <p style={{ fontWeight: 700, margin: 0 }}>No patients found.</p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+      )}
+
+      <style>{`
+        @media (max-width: 1100px) { .admin-stat-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 600px)  { .admin-stat-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   );
 };
 
 export default AdminPatients;
-
