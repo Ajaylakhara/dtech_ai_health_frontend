@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 const stats = [
   { value: 50000, suffix: '+', label: 'Patients Served', description: 'Across all departments' },
@@ -11,16 +11,39 @@ const stats = [
 const AnimatedNumber = ({ value, suffix }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
-  const motionVal = useMotionValue(0);
-  const springVal = useSpring(motionVal, { duration: 2000, bounce: 0 });
+  const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    if (inView) motionVal.set(value);
-  }, [inView, value, motionVal]);
+    if (inView) {
+      let start = 0;
+      const end = value;
+      if (start === end) return;
+
+      const duration = 2000; // 2 seconds
+      const startTime = performance.now();
+
+      const animate = (currentTime) => {
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+        
+        // Easing out quadratic for smooth decel
+        const easeOutQuad = progress * (2 - progress);
+        
+        const currentValue = Math.round(start + (end - start) * easeOutQuad);
+        setDisplayValue(currentValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }
+  }, [inView, value]);
 
   return (
     <span ref={ref} style={{ fontFamily: "'Lora', serif", fontSize: 'clamp(2.4rem, 4vw, 3.4rem)', fontWeight: 700, color: '#0D1B2A', lineHeight: 1 }}>
-      <motion.span>{springVal.get() > 0 ? Math.round(springVal.get()).toLocaleString() : 0}</motion.span>
+      <span>{displayValue.toLocaleString()}</span>
       {suffix}
     </span>
   );
